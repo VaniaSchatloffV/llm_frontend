@@ -8,7 +8,7 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - db  # Dependencia del servicio de la base de datos
+      - db
     env_file:
       - .env
     container_name: python-app
@@ -22,3 +22,4 @@ services:
       - "5432:5432"
     
     container_name: postgres-db
+
