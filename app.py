@@ -9,5 +9,5 @@ app = Flask(__name__)
 
 @app.get('/')
 def index():
-    return 'index a'
+    return 'index'
 
