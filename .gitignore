@@ -3,3 +3,7 @@
 __pycache__/
 __pypackages__/
 main.py
+.ipynb_checkpoints/
+handlers/.ipynb_checkpoints/
+static/.ipynb_checkpoints/
+templates/.ipynb_checkpoints/
