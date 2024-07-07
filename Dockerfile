@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 RUN chmod -x service_entrypoint.sh
-CMD ["./service_entrypoint.sh"]  # Reemplaza con el comando de inicio de tu aplicación Python
+CMD ["./service_entrypoint.sh"]

@@ -9,6 +9,8 @@ db_name = os.getenv("POSTGRES_DB")
 db_user = os.getenv("POSTGRES_USER")
 db_password = os.getenv("POSTGRES_PASSWORD")
 
+print(db_host, db_port, db_name, db_user, db_password)
+
 
 class DBHandler():
     def __init__(
