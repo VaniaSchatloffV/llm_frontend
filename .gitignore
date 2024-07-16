@@ -7,3 +7,4 @@ main.py
 handlers/.ipynb_checkpoints/
 static/.ipynb_checkpoints/
 templates/.ipynb_checkpoints/
+venv/bin/activate.csh
