@@ -7,13 +7,17 @@ def login():
     email = request.form.get('email')
     password = request.form.get('password')
     with DBHandler() as db_handler:
-        user = db_handler.select("SELECT id, email, password FROM users WHERE email = %s", (email,))
-        print(user)
-        if user and check_password_hash(user[0][2], password):
-            session['user_id'] = user[0][0]
+        user = db_handler.select("SELECT id, name, lastname, email, password, role_id FROM users WHERE email = %s", (email,))
+        if user and check_password_hash(user[0][4], password):
+            role = db_handler.select("SELECT role_name FROM roles WHERE id = %s", (user[0][5],))
+            session['user_name'] = user[0][1]
+            session['user_lastname'] = user[0][2]
+            if role:
+                session['user_role'] = role[0][0]
             flash('Login successful!', 'success')
             return redirect(url_for('users.main'))
         else:
+            print("invalid mail o pass")
             flash('Invalid email or password', 'danger')
             return redirect(url_for('users.index'))
 
@@ -43,9 +47,8 @@ def register():
                 flash('El correo electrónico ya está registrado.', 'danger')
                 print('El correo electrónico ya está registrado.')
                 return redirect(url_for('users.register'))
-            print("INSERT INTO users (email, name, lastname, password) VALUES (%s, %s, %s, %s)")
             db_handler.execute(
-                "INSERT INTO users (email, name, lastname, password) VALUES (%s, %s, %s, %s)",
+                "INSERT INTO users (email, name, lastname, password, role_id) VALUES (%s, %s, %s, %s, 2)",
                 (email, name, lastname, hashed_password)
             )
             print("Exito")
@@ -55,3 +58,8 @@ def register():
         print("error", e)
         flash('Ocurrió un error durante el registro. Por favor, intenta de nuevo.', 'danger')
         return redirect(url_for('users.register'))
+
+def logout():
+    session.clear()  # Elimina todos los datos de la sesión
+    flash('You have been logged out successfully.', 'success')
+    return redirect(url_for('users.index'))  # Redirige a la página de inicio

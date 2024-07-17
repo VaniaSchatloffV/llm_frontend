@@ -10,7 +10,5 @@ app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
 app.register_blueprint(user_blueprint, url_prefix='/')
 
 
-
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8002)

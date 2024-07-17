@@ -11,29 +11,17 @@
         <div class="navbar">
             <img src="../static/images/logo.png" alt="Logo" class="logo">
             <div class="user-info">
-                <img src="user.jpg" alt="User" class="user-img">
-                <span>Michael</span>
-                <span>Data Analyst</span>
+                <span>¡Hola, {{name}} {{lastname}}!   {{user_type}}</span>
             </div>
             <nav>
-                <a href="#">Home</a>
-                <a href="#">Conversations</a>
-                <a href="#">Metrics</a>
+                <a href="#">Inicio</a>
+                <a href="#">Conversaciones</a>
+                <a href="#">Métricas</a>
             </nav>
-            <button class="logout">Log Out</button>
+            <form action="{{ url_for('users.logout') }}" method="get" style="display: inline;">
+                <button type="submit" class="logout">Cerrar sesión</button>
+            </form>
         </div>
     </header>
-    <main>
-        <div class="chat-container">
-            <div class="message sent">Necesito todos los pacientes ingresados en la fundación entre el 2015 y 2017</div>
-            <div class="message received">¡Claro! ¿En qué formato lo necesitas?</div>
-            <div class="message sent">En formato csv</div>
-            <div class="message received">El resultado se encuentra en el siguiente <a href="#">enlace</a>.</div>
-        </div>
-        <div class="message-input">
-            <input type="text" placeholder="Write your message here">
-            <button>&#10148;</button>
-        </div>
-    </main>
 </body>
 </html>
