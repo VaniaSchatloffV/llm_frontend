@@ -7,6 +7,7 @@ body {
     height: 100vh;
     margin: 0;
 }
+
 .login-container {
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -15,10 +16,20 @@ body {
     width: 300px;
     text-align: center;
 }
+
 .login-container img {
     width: 150px;
     margin-bottom: 20px;
 }
+
+.login-container label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px 0;
+    font-weight: bold;
+    color: #333;
+}
+
 .login-container input {
     width: calc(100% - 20px);
     padding: 10px;
@@ -26,25 +37,57 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-.login-container button {
+
+.login-container .form-group {
+    margin-bottom: 15px;
+}
+
+.login-container .form-group-item {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.login-container .flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.login-container .login-button, .login-container .register-button {
     width: 100%;
     padding: 10px;
-    background-color: #f0ad4e;
     border: none;
     border-radius: 5px;
-    color: white;
     font-size: 16px;
     cursor: pointer;
 }
-.login-container button:hover {
+
+.login-container .login-button {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.login-container .login-button:hover {
     background-color: #ec971f;
 }
+
+.login-container .register-button {
+    background-color: #000e8e;
+    color: white;
+    margin-top: 10px;
+}
+
+.login-container .register-button:hover {
+    background-color: #00095d;
+}
+
 .login-container a {
     display: block;
     margin-top: 10px;
     color: #007bff;
     text-decoration: none;
 }
+
 .login-container a:hover {
     text-decoration: underline;
 }
+

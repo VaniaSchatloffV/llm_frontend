@@ -1,21 +1,16 @@
-from flask import Flask, Blueprint, jsonify
+import os
+from flask import Flask, Blueprint, jsonify, url_for, request, render_template, redirect, flash, session
 from markupsafe import escape
-from flask import url_for
-from flask import request
-from flask import render_template
+
+from api.login.users import user_blueprint
 
 app = Flask(__name__)
-# bp = Blueprint('api', __name__, url_prefix='/ServiceDev/5000')
+app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
 
-@app.get('/')
-def index():
-    return render_template('index.html')
+app.register_blueprint(user_blueprint, url_prefix='/')
 
-@app.get('/main/')
-def main():
-    return render_template('main.html')
 
-# app.register_blueprint(bp)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8002)
