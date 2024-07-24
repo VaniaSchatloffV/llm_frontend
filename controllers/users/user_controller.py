@@ -15,7 +15,7 @@ def login():
             if role:
                 session['user_role'] = role[0][0]
             flash('Login successful!', 'success')
-            return redirect(url_for('users.main'))
+            return redirect(url_for('function_chat.main_chat'))
         else:
             print("invalid mail o pass")
             flash('Invalid email or password', 'danger')
@@ -60,6 +60,6 @@ def register():
         return redirect(url_for('users.register'))
 
 def logout():
-    session.clear()  # Elimina todos los datos de la sesión
-    flash('You have been logged out successfully.', 'success')
-    return redirect(url_for('users.index'))  # Redirige a la página de inicio
+    session.clear()
+    flash('Sesión cerrada.', 'success')
+    return redirect(url_for('users.index'))

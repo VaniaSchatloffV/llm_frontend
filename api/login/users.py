@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session
 from controllers.users import user_controller
-
+from decorators.login_decorator import login_required
 
 user_blueprint = Blueprint('users', __name__)
 
@@ -21,12 +21,8 @@ def register():
     return user_controller.register()
 
 @user_blueprint.route('/logout')
+@login_required
 def logout():
     return user_controller.logout()
 
-@user_blueprint.get('/main/')
-def main():
-    name = session.get('user_name')
-    lastname = session.get('user_lastname')
-    role = session.get('user_role')
-    return render_template('main.html', name=name, lastname=lastname, user_type=role)
+

@@ -14,14 +14,17 @@
                 <span>¡Hola, {{name}} {{lastname}}!   {{user_type}}</span>
             </div>
             <nav>
-                <a href="#">Inicio</a>
-                <a href="#">Conversaciones</a>
-                <a href="#">Métricas</a>
+                <a href="{{ url_for('function_chat.main_chat') }}">Inicio</a>
+                <a href="{{ url_for('function_conversations.main_conversations') }}">Conversaciones</a>
+                <a href="{{ url_for('function_metrics.main_metrics') }}">Métricas</a>
             </nav>
             <form action="{{ url_for('users.logout') }}" method="get" style="display: inline;">
                 <button type="submit" class="logout">Cerrar sesión</button>
             </form>
         </div>
     </header>
+    <div>
+        {{data|safe}}
+    </div>
 </body>
 </html>
