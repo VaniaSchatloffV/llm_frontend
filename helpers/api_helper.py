@@ -20,8 +20,7 @@ def post(url, url_params:Optional[dict] = None, body:Optional[dict] = None):
     try:
         response = requests.post(url, params=url_params, json=body)
         response.raise_for_status()
-        print("Status Code:", response.status_code)
-        print("Response Body:", response.json())
+        return response.json()
     except requests.exceptions.HTTPError as http_err:
         print(f"HTTP error occurred: {http_err}")
     except Exception as err:
@@ -37,5 +36,5 @@ def send_message(prompt: str):
         "prompt": prompt,
         "conversation_id": 1
     }
-    post(url= api_url + endpoint, body=body)
+    return post(url= api_url + endpoint, body=body)
 

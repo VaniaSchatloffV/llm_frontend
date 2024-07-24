@@ -1,3 +1,62 @@
-<div>
-    <h1>chat page</h1>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/chat_style.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <!-- Aquí se mostrarán los mensajes -->
+        </div>
+        <div class="chat-input">
+            <form id="chat-form" method="post">
+                <input type="text" id="message" name="message" placeholder="Escribe tu mensaje..." required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('chat-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var message = document.getElementById('message').value;
+
+            fetch("{{ url_for('chat.send_message') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'message': message
+                })
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    document.getElementById('message').value = '';
+                    updateChatMessages(data.messages);
+                }
+            });
+        });
+
+        function updateChatMessages(messages) {
+            var chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = '';
+            messages.forEach(function(msg) {
+                var messageDiv = document.createElement('div');
+                messageDiv.textContent = msg;
+                chatMessages.appendChild(messageDiv);
+            });
+        }
+
+        function loadMessages() {
+            fetch("{{ url_for('chat.get_messages') }}").then(response => response.json()).then(data => {
+                updateChatMessages(data.messages);
+            });
+        }
+
+        // Cargar mensajes al cargar la página
+        loadMessages();
+    </script>
+</body>
+</html>

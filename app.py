@@ -3,6 +3,7 @@ from flask import Flask, Blueprint, jsonify, url_for, request, render_template, 
 from markupsafe import escape
 
 from api.login.users import user_blueprint
+from api.chatbot.chat import llm_blueprint
 from api.functions.chat import chat_blueprint
 from api.functions.conversations import conversations_blueprint
 from api.functions.metrics import metrics_blueprint
@@ -14,6 +15,7 @@ app.register_blueprint(user_blueprint, url_prefix='/')
 app.register_blueprint(chat_blueprint, url_prefix='/')
 app.register_blueprint(conversations_blueprint, url_prefix='/')
 app.register_blueprint(metrics_blueprint, url_prefix='/')
+app.register_blueprint(llm_blueprint, url_prefix='/c/')
 
 
 if __name__ == '__main__':
