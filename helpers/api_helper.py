@@ -26,15 +26,4 @@ def post(url, url_params:Optional[dict] = None, body:Optional[dict] = None):
     except Exception as err:
         print(f"Other error occurred: {err}")
 
-def ping():
-    endpoint = "/ping/"
-    get(api_url + endpoint)
-
-def send_message(prompt: str):
-    endpoint = "/sendMessage/"
-    body = {
-        "prompt": prompt,
-        "conversation_id": 1
-    }
-    return post(url= api_url + endpoint, body=body)
 

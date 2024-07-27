@@ -14,7 +14,9 @@ def send_message():
     message = data.get('message')
     if message:
         messages.append(message)
-        assistant_message = llm_controller.send_message(message)
+        response = llm_controller.send_message(message, session['conversation_id'], session['user_id'])
+        assistant_message = response.get("response")
+        session['conversation_id'] = response.get("conversation_id")
         messages.append(assistant_message)
     return jsonify({'success': True, 'messages': messages})
 

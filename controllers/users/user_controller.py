@@ -10,10 +10,12 @@ def login():
         user = db_handler.select("SELECT id, name, lastname, email, password, role_id FROM users WHERE email = %s", (email,))
         if user and check_password_hash(user[0][4], password):
             role = db_handler.select("SELECT role_name FROM roles WHERE id = %s", (user[0][5],))
+            session['user_id'] = user[0][0]
             session['user_name'] = user[0][1]
             session['user_lastname'] = user[0][2]
             if role:
                 session['user_role'] = role[0][0]
+            session['conversation_id'] = 0
             flash('Login successful!', 'success')
             return redirect(url_for('function_chat.main_chat'))
         else:
