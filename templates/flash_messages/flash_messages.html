@@ -1,0 +1,17 @@
+<div id="flash-message" class="flash-message">
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const flashMessage = document.getElementById('flash-message');
+                flashMessage.innerHTML = "{{ messages[-1][1] }}";
+                flashMessage.classList.add("{{ messages[-1][0] }}")
+                flashMessage.classList.add('show');
+                setTimeout(() => {
+                    flashMessage.classList.remove('show');
+                }, 5000);
+            });
+        </script>
+    {% endif %}
+{% endwith %}

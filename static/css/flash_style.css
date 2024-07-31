@@ -1,0 +1,38 @@
+
+.flash-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.5s, transform 0.5s;
+    z-index: 1000;
+}
+
+.flash-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.flash-message.success {
+    background-color: #78ee93;
+    color: #3b3b3b;
+}
+
+.flash-message.error {
+    background-color: #e65f6a;
+    color: #3b3b3b;
+}
+
+.flash-message.info {
+    background-color: #5fdaf0;
+    color: #3b3b3b;
+}
+
+.flash-message.danger {
+    background-color: #f0b15f;
+    color: #3b3b3b;
+}

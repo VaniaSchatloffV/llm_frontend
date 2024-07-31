@@ -1,4 +1,6 @@
 import os
+
+from datetime import timedelta
 from flask import Flask, Blueprint, jsonify, url_for, request, render_template, redirect, flash, session
 from markupsafe import escape
 
@@ -10,6 +12,18 @@ from api.functions.metrics import metrics_blueprint
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
+
+@app.before_request
+def before_request():
+    session.permanent = True
+
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 app.register_blueprint(user_blueprint, url_prefix='/')
 app.register_blueprint(chat_blueprint, url_prefix='/')
