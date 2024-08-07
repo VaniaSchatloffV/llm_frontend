@@ -10,10 +10,12 @@
     transform: translateY(-20px);
     transition: opacity 0.5s, transform 0.5s;
     z-index: 1000;
+    display: none;
 }
 
 .flash-message.show {
     opacity: 1;
+    display: block;
     transform: translateY(0);
 }
 
