@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, jsonify, request
-from controllers.llm_controller import llm_controller
+from controllers.llm import llm_controller
 from decorators.login_decorator import login_required
 
 messages = []
@@ -22,4 +22,6 @@ def send_message():
 
 @llm_blueprint.route('/get_messages/', methods=['GET'])
 def get_messages():
-    return jsonify({'messages': messages})
+    #data = request.get_json()
+    #conversation_id = data.get("conversation_id")
+    return llm_controller.get_conversation(conversation_id=session['conversation_id'])
