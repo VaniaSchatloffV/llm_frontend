@@ -13,15 +13,12 @@ def send_message():
     data = request.get_json()
     message = data.get('message')
     if message:
-        messages.append(message)
         response = llm_controller.send_message(message, session['conversation_id'], session['user_id'])
-        assistant_message = response.get("response")
         session['conversation_id'] = response.get("conversation_id")
-        messages.append(assistant_message)
-    return jsonify({'success': True, 'messages': messages})
+    return jsonify({'success': True, 'messages': llm_controller.get_conversation(conversation_id=session['conversation_id'])})
 
 @llm_blueprint.route('/get_messages/', methods=['GET'])
 def get_messages():
     #data = request.get_json()
     #conversation_id = data.get("conversation_id")
-    return llm_controller.get_conversation(conversation_id=session['conversation_id'])
+    return jsonify(llm_controller.get_conversation(conversation_id=session['conversation_id']))
