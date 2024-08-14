@@ -20,7 +20,6 @@ def get_conversation(conversation_id: int):
         "conversation_id": conversation_id
     }
     conversation = api_helper.get(url= endpoint, body=body)
-    print(conversation)
     if conversation:
         messages = []
         for message in conversation:
@@ -28,6 +27,6 @@ def get_conversation(conversation_id: int):
                 messages.append(message.get("content"))
             else:
                 messages.append(message.get("content")[0].get("text"))
-        return jsonify({'messages': messages})
+        return {'messages': messages}
     else:
         return []
