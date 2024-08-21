@@ -1,3 +1,5 @@
+from configs.config import get_settings
+
 import os
 
 from datetime import timedelta
@@ -10,8 +12,10 @@ from api.functions.chat import chat_blueprint
 from api.functions.conversations import conversations_blueprint
 from api.functions.metrics import metrics_blueprint
 
+settings = get_settings()
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
+app.config['SECRET_KEY'] = settings.flask_secret_key
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 
 @app.before_request
