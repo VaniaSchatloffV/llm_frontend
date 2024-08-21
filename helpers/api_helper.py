@@ -3,7 +3,11 @@ from typing import Optional
 import requests
 import json
 
-api_url = os.getenv("API_URL")
+from configs.config import get_settings
+
+settings = get_settings()
+
+api_url = settings.api_url
 
 def get(url, url_params: Optional[dict] = None, body: Optional[dict] = None):
     if api_url not in url:
