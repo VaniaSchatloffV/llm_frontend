@@ -8,6 +8,7 @@
     border-radius: 10px;
     overflow: hidden;
     background-color: #fff;
+    height: 80vh;
 }
 
 .chat-header {
@@ -20,8 +21,9 @@
     flex-grow: 1;
     padding: 10px;
     overflow-y: auto;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc;
+    border-radius: 5px #ccc;
+    max-height: 80vh;
 }
 
 .chat-messages div {
@@ -38,7 +40,7 @@
     border-top: 1px solid #ccc;
 }
 
-.chat-input input {
+.chat-input input[type="text"] {
     flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
@@ -53,6 +55,11 @@
     background-color: #f0ad4e;
     color: white;
     cursor: pointer;
+}
+
+.chat-input button:disabled {
+    background-color: #ffc675;
+    cursor: not-allowed;
 }
 
 .chat-input button:hover {

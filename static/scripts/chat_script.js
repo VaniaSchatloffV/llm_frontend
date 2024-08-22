@@ -1,6 +1,14 @@
 document.getElementById('chat-form').addEventListener('submit', function(event) {
     event.preventDefault();
-    var message = document.getElementById('message').value;
+
+    var submitButton = document.querySelector('#chat-form button[type="submit"]');
+    var messageInput = document.getElementById('message');
+
+    // Deshabilitar el botón y el campo de entrada
+    submitButton.disabled = true;
+    messageInput.disabled = true;
+
+    var message = messageInput.value;
 
     fetch(sendMessageUrl, {
         method: 'POST',
@@ -12,9 +20,17 @@ document.getElementById('chat-form').addEventListener('submit', function(event) 
         })
     }).then(response => response.json()).then(data => {
         if (data.success) {
-            document.getElementById('message').value = '';
+            messageInput.value = '';
             loadMessages();
         }
+        // Volver a habilitar el botón y el campo de entrada
+        submitButton.disabled = false;
+        messageInput.disabled = false;
+    }).catch(error => {
+        console.error('Error:', error);
+        // Volver a habilitar el botón y el campo de entrada si ocurre un error
+        submitButton.disabled = false;
+        messageInput.disabled = false;
     });
 });
 
