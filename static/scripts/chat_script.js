@@ -42,7 +42,10 @@ function updateChatMessages(messages) {
         messageDiv.textContent = msg;
         chatMessages.appendChild(messageDiv);
     });
+    // Desplazarse al final del contenedor de mensajes
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
 
 function loadMessages() {
     fetch(getMessagesUrl).then(response => response.json()).then(data => {
