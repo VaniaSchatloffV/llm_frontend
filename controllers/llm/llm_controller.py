@@ -30,3 +30,11 @@ def get_conversation(conversation_id: int):
         return {'messages': messages}
     else:
         return []
+
+def get_user_conversations(user_id: int):
+    endpoint = "/getConversations/"
+    body = {
+        "user_id": user_id
+    }
+    conversations = api_helper.get(url= endpoint, body=body)
+    return conversations

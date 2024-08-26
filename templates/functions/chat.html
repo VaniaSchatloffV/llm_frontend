@@ -10,9 +10,9 @@
 <body>
     <div class="sidebar bar-block card animate-left" style="display:none" id="mySidebar">
         <button class="button large" onclick="close_sidebar()">Cerrar</button>
-        <a href="#" class="button">Link 1</a>
-        <a href="#" class="button">Link 2</a>
-        <a href="#" class="button">Link 3</a>
+        <div class="conversations" id="conversations">
+            <!-- Aquí se mostrarán las conversaciones -->
+        </div>
     </div>
 
     <div id="main">
@@ -35,6 +35,7 @@
     <script>
         const sendMessageUrl = "{{ url_for('chat.send_message') }}";
         const getMessagesUrl = "{{ url_for('chat.get_messages') }}";
+        const getConversationsUrl = "{{ url_for('chat.get_conversations') }}";
     </script>
     <script src="{{ url_for('static', filename='scripts/chat_script.js') }}"></script>
 </body>
