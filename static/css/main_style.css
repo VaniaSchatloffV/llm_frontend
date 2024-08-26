@@ -50,6 +50,7 @@ nav a:hover {
     border-radius: 5px;
     color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .logout:hover {
@@ -117,6 +118,7 @@ main {
     border-radius: 5px;
     color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .message-input button:hover {

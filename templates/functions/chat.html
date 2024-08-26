@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_style.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chat</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_style.css') }}">
+    </head>
+
 <body>
-    <div class="chat-container">
-        <div class="chat-messages" id="chat-messages">
-            <!-- Aquí se mostrarán los mensajes -->
+    <div class="sidebar bar-block card animate-left" style="display:none" id="mySidebar">
+        <button class="button large" onclick="close_sidebar()">Cerrar</button>
+        <a href="#" class="button">Link 1</a>
+        <a href="#" class="button">Link 2</a>
+        <a href="#" class="button">Link 3</a>
+    </div>
+
+    <div id="main">
+
+        <div class="teal">
+            <button id="openNav" class="button xlarge" onclick="open_sidebar()">&#9776;</button>
         </div>
-        <div class="chat-input">
-            <form id="chat-form" method="post">
-                <input type="text" id="message" name="message" placeholder="Escribe tu mensaje..." required>
-                <button type="submit">Enviar</button>
-            </form>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <!-- Aquí se mostrarán los mensajes -->
+            </div>
+            <div class="chat-input">
+                <form id="chat-form" method="post">
+                    <input type="text" id="message" name="message" placeholder="Escribe tu mensaje..." required>
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
         </div>
     </div>
     <script>
@@ -24,4 +38,5 @@
     </script>
     <script src="{{ url_for('static', filename='scripts/chat_script.js') }}"></script>
 </body>
+
 </html>
