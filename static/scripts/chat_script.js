@@ -35,17 +35,21 @@ document.getElementById('chat-form').addEventListener('submit', function(event) 
 });
 
 function updateChatMessages(messages) {
-    if(messages){
-        var chatMessages = document.getElementById('chat-messages');
-        chatMessages.innerHTML = '';
-        messages.forEach(function(msg) {
-            var messageDiv = document.createElement('div');
-            messageDiv.textContent = msg;
-            chatMessages.appendChild(messageDiv);
-        });
-        // Desplazarse al final del contenedor de mensajes
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+    if(!messages){
+        messages = []
     }
+    var chatMessages = document.getElementById('chat-messages');
+    chatMessages.innerHTML = '';
+    messages.forEach(function(msg) {
+        var messageDiv = document.createElement('div');
+        messageDiv.textContent = msg.content;
+        if(msg.role == "user"){
+            messageDiv.style.textAlign = "right";
+        }
+        chatMessages.appendChild(messageDiv);
+    });
+    // Desplazarse al final del contenedor de mensajes
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 
@@ -80,14 +84,38 @@ function loadConversations() {
     });
 }
 
+function setConversationId(conversationId) {
+    fetch(setConversationsUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'conversation_id': conversationId
+        })
+    }).then(response => response.json()).then(data => {
+        if (data.success) {
+            loadMessages();
+        }
+    });
+}
 
 function updateConversations(conversations) {
     var conversationsBar = document.getElementById('conversations');
-    console.log(conversations);
     conversationsBar.innerHTML = '';
+    // Nueva conversación
+    var link_name = '+ Nueva conversación'
+    var link = document.createElement('a');
+    link.className = 'button';
+    link.textContent = link_name;
+    //link.style.textAlign = "center";
+    link.addEventListener('click', function() {
+        setConversationId(0);
+        close_sidebar();
+    });
+    conversationsBar.appendChild(link);
 
     conversations.forEach(function(conversation) {
-        console.log(conversation);
         var link_name = ''
         if(conversation.name){
             link_name = conversation.name;
@@ -95,9 +123,13 @@ function updateConversations(conversations) {
             link_name = 'Conversación ' + conversation.id;
         }
         var link = document.createElement('a');
-        link.href = '#';
+        //link.href = '#';
         link.className = 'button';
         link.textContent = link_name;
+        link.addEventListener('click', function() {
+            setConversationId(conversation.id);
+            close_sidebar();
+        });
         conversationsBar.appendChild(link);
     });
 }

@@ -1,4 +1,5 @@
 from flask.json import jsonify
+from flask import session
 from helpers import api_helper
 
 def ping():
@@ -24,12 +25,14 @@ def get_conversation(conversation_id: int):
         messages = []
         for message in conversation:
             if message.get("role") == "user":
-                messages.append(message.get("content"))
+                messages.append(message)
             else:
-                messages.append(message.get("content")[0].get("text"))
+                msg = {"role": "assistant", "content": message.get("content")[0].get("text")}
+                messages.append(msg)
         return {'messages': messages}
     else:
         return []
+
 
 def get_user_conversations(user_id: int):
     endpoint = "/getConversations/"
@@ -38,3 +41,11 @@ def get_user_conversations(user_id: int):
     }
     conversations = api_helper.get(url= endpoint, body=body)
     return conversations
+
+
+def set_conversation(conversation_id: int):
+    try:
+        session["conversation_id"] = conversation_id
+        return {'success': True}
+    except Exception as e:
+        return {'success': False}

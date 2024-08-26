@@ -28,3 +28,11 @@ def get_conversations():
     #data = request.get_json()
     #conversation_id = data.get("conversation_id")
     return jsonify(llm_controller.get_user_conversations(user_id=session['user_id']))
+
+@llm_blueprint.route('/set_conversation/', methods=['POST'])
+@login_required
+def set_conversation():
+    data = request.get_json()
+    conversation_id = data.get('conversation_id')
+    return llm_controller.set_conversation(conversation_id)
+
