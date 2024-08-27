@@ -103,12 +103,12 @@ function setConversationId(conversationId) {
 function updateConversations(conversations) {
     var conversationsBar = document.getElementById('conversations');
     conversationsBar.innerHTML = '';
+
     // Nueva conversación
-    var link_name = '+ Nueva conversación'
+    var link_name = '+ Nueva conversación';
     var link = document.createElement('a');
-    link.className = 'button';
+    link.className = 'button conversation-link';
     link.textContent = link_name;
-    //link.style.textAlign = "center";
     link.addEventListener('click', function() {
         setConversationId(0);
         close_sidebar();
@@ -116,22 +116,35 @@ function updateConversations(conversations) {
     conversationsBar.appendChild(link);
 
     conversations.forEach(function(conversation) {
-        var link_name = ''
-        if(conversation.name){
-            link_name = conversation.name;
-        }else{
-            link_name = 'Conversación ' + conversation.id;
-        }
+        var link_name = conversation.name ? conversation.name : 'Conversación ' + conversation.id;
+        var container = document.createElement('div');
+        container.className = 'conversation-container';
         var link = document.createElement('a');
-        //link.href = '#';
-        link.className = 'button';
+        link.id = 'link-conversation-' + conversation.id;
+        link.className = 'button conversation-link';
         link.textContent = link_name;
         link.addEventListener('click', function() {
             setConversationId(conversation.id);
             close_sidebar();
         });
-        conversationsBar.appendChild(link);
+        container.appendChild(link);
+        var button = document.createElement('a');
+        button.className = 'button conversation-link';
+        button.textContent = '🖉';
+        button.style.textAlign = "center";
+        button.style.width = '50px'
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            changeConversationName(conversation.id);
+        });
+        container.appendChild(button);
+        conversationsBar.appendChild(container);
     });
+}
+
+
+function changeConversationName(conversation_id){
+    console.log(conversation_id);
 }
 
 // Cargar mensajes al cargar la página
