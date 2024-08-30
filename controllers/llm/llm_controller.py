@@ -27,7 +27,8 @@ def get_conversation(conversation_id: int):
             if message.get("role") == "user":
                 messages.append(message)
             else:
-                msg = {"role": "assistant", "content": message.get("content")[0].get("text")}
+                content = message.get("content")
+                msg = {"role": "assistant", "content": content}
                 messages.append(msg)
         return {'messages': messages}
     else:
@@ -49,3 +50,14 @@ def set_conversation(conversation_id: int):
         return {'success': True}
     except Exception as e:
         return {'success': False}
+
+def download_file(file_id: int, file_type: str):
+    if file_type == "csv":
+        endpoint = "/download/csv/"
+    if file_type == "xlsx":
+        endpoint = "/download/xlsx/"
+    body = {
+        "file_id": file_id
+    }
+    conversations = api_helper.get(url= endpoint, body=body)
+    return conversations

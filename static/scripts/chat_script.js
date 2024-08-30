@@ -1,15 +1,7 @@
-document.getElementById('chat-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
+function sendMessage(message){
+    loadOneMessage(message);
     var submitButton = document.querySelector('#chat-form button[type="submit"]');
     var messageInput = document.getElementById('message');
-
-    // Deshabilitar el botón y el campo de entrada
-    submitButton.disabled = true;
-    messageInput.disabled = true;
-
-    var message = messageInput.value;
-
     fetch(sendMessageUrl, {
         method: 'POST',
         headers: {
@@ -32,6 +24,21 @@ document.getElementById('chat-form').addEventListener('submit', function(event) 
         submitButton.disabled = false;
         messageInput.disabled = false;
     });
+}
+
+document.getElementById('chat-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var submitButton = document.querySelector('#chat-form button[type="submit"]');
+    var messageInput = document.getElementById('message');
+
+    // Deshabilitar el botón y el campo de entrada
+    submitButton.disabled = true;
+    messageInput.disabled = true;
+
+    var message = messageInput.value;
+    sendMessage(message)
+    
 });
 
 function updateChatMessages(messages) {
@@ -40,9 +47,39 @@ function updateChatMessages(messages) {
     }
     var chatMessages = document.getElementById('chat-messages');
     chatMessages.innerHTML = '';
-    messages.forEach(function(msg) {
+    messages.forEach(function(msg, index) {
         var messageDiv = document.createElement('div');
-        messageDiv.textContent = msg.content;
+        if(msg.content.options){
+            messageDiv.textContent = msg.content.text;
+            if(index === messages.length - 1){
+                msg.content.options.forEach(function(butt) {
+                    var link = document.createElement('a');
+                    link.className = 'chat-messages button a';
+                    link.textContent = butt;
+                    link.addEventListener('click', function() {
+                        sendMessage(butt);
+                    });
+                    messageDiv.appendChild(link);
+                })
+                var submitButton = document.querySelector('#chat-form button[type="submit"]');
+                var messageInput = document.getElementById('message');
+                submitButton.disabled = true;
+                messageInput.disabled = true;
+            }
+        }
+        else if(msg.content.file_id){
+            messageDiv.textContent = msg.content.text;
+            var link = document.createElement('a');
+            link.className = 'chat-messages button a';
+            link.textContent = "Descargar";
+            link.addEventListener('click', function() {
+                downloadFile(msg.content.file_id, msg.content.file_type);
+            });
+            messageDiv.appendChild(link);
+        }
+        else{
+            messageDiv.textContent = msg.content;
+        }
         if(msg.role == "user"){
             messageDiv.style.textAlign = "right";
         }
@@ -56,6 +93,19 @@ function updateChatMessages(messages) {
 function loadMessages() {
     fetch(getMessagesUrl).then(response => response.json()).then(data => {
         updateChatMessages(data.messages);
+    });
+}
+
+function loadOneMessage(message) {
+    var msg = {"role": "user", "content": message};
+    fetch(getMessagesUrl).then(response => response.json()).then(data => {
+        if(data.messages){
+            data.messages.push(msg);
+            updateChatMessages(data.messages);
+        }else{
+            updateChatMessages([msg]);
+        }
+        
     });
 }
 
@@ -145,6 +195,12 @@ function updateConversations(conversations) {
 
 function changeConversationName(conversation_id){
     console.log(conversation_id);
+}
+
+function downloadFile(file_id, file_type) {
+    console.log("Descargando archivo ")
+    console.log(file_id);
+    console.log(file_type);
 }
 
 // Cargar mensajes al cargar la página

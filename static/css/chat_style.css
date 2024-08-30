@@ -27,10 +27,29 @@
 }
 
 .chat-messages div {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 5px;
     background-color: #f1f1f1;
+}
+
+.chat-messages div a.button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 30%;
+    text-align: center;
+    background-color: #f4d1a0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chat-messages div a.button:hover {
+    background-color: #f6be6f;
+    color: #000;
 }
 
 .chat-input {

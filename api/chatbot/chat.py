@@ -36,3 +36,11 @@ def set_conversation():
     conversation_id = data.get('conversation_id')
     return llm_controller.set_conversation(conversation_id)
 
+@llm_blueprint.route('/downloadFile/')
+@login_required
+def download_file():
+    data = request.get_json()
+    file_id = data.get('file_id')
+    file_type = data.get('file_type')
+    return llm_controller.download_file(file_id, file_type)
+
