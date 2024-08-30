@@ -17,7 +17,7 @@ def get_user(user_email: str):
             UserObject,
             UserObject.email == user_email,
             defer_cols=[],
-            columns=[UserObject.id, UserObject.name, UserObject.lastname, UserObject.role_id]
+            columns=[UserObject.id, UserObject.name, UserObject.lastname, UserObject.role_id, UserObject.password]
         )
         if len(user) == 0:
             return {}
