@@ -1,29 +1,6 @@
-from handlers.DBHandler import DBHandler
-
-CHECK_USER = """
-    SELECT
-        id, name, lastname, password, role_id
-    FROM
-        users
-    WHERE
-        email = %s
-"""
-
-GET_ROLE = """
-    SELECT
-        role_name
-    FROM
-        roles
-    WHERE
-        id = %s
-"""
-
-INSERT_USER = """
-    INSERT INTO users(
-        email, name, lastname, password, role_id
-    ) VALUES
-    (%s, %s, %s, %s, 2)
-"""
+from handlers.DBORMHandler import DB_ORM_Handler
+from models.users import UserObject
+from models.roles import RoleObject
 
 def get_user(user_email: str):
     """
@@ -35,29 +12,38 @@ def get_user(user_email: str):
         - role_id
     Almacenados en la base de datos. Si el usuario no existe, retorna diccionario vacío.
     """
-    with DBHandler() as db:
-        user = db.select(CHECK_USER, (user_email,))
-    if user:
-        return {
-            "id"        : user[0][0],
-            "name"      : user[0][1],
-            "lastname"  : user[0][2],
-            "password"  : user[0][3],
-            "role_id"   : user[0][4]
-        }
-    else:
-        return {}
+    with DB_ORM_Handler() as db:
+        user = db.getObjects(
+            UserObject,
+            UserObject.email == user_email,
+            defer_cols=[],
+            columns=[UserObject.id, UserObject.name, UserObject.lastname, UserObject.role_id, UserObject.password]
+        )
+        if len(user) == 0:
+            return {}
+        return user.pop()
 
 
 def get_role(role_id: int):
-    with DBHandler() as db:
-        role = db.select(GET_ROLE, (role_id,))
-        if role:
-            return role[0][0]
-        else:
+    with DB_ORM_Handler() as db:
+        role = db.getObjects(
+            RoleObject,
+            RoleObject.id == role_id,
+            defer_cols=[],
+            columns=[RoleObject.role_name]
+        )
+        if len(role) == 0:
             return None
+        return role.pop().get("role_name")
 
 def insert_new_user(email: str, name: str, lastname: str, password: str):
-    with DBHandler() as db:
-        db.execute(INSERT_USER, (email, name, lastname, password))
+    User = UserObject()
+    User.email = email
+    User.name = name
+    User.lastname = lastname
+    User.password = password
+    User.role_id = 2
+    with DB_ORM_Handler() as db:
+        db.createTable(User)
+        db.saveObject(User)
         
