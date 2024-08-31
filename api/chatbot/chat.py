@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, session, jsonify, request
+import os
+from flask import Blueprint, render_template, session, jsonify, request, send_file, abort, flash
 from controllers.llm import llm_controller
 from decorators.login_decorator import login_required
 
@@ -36,11 +37,22 @@ def set_conversation():
     conversation_id = data.get('conversation_id')
     return llm_controller.set_conversation(conversation_id)
 
-@llm_blueprint.route('/downloadFile/')
+@llm_blueprint.route('/downloadFile/', methods=['POST'])
 @login_required
 def download_file():
     data = request.get_json()
     file_id = data.get('file_id')
     file_type = data.get('file_type')
-    return llm_controller.download_file(file_id, file_type)
-
+    file = llm_controller.download_file(file_id, file_type)
+    file_path = file.get("file_path")
+    if not os.path.exists(file_path):
+        abort(404, description="File not found")
+    def remove_file_after_send(file_path):
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            print(f"Error removing file: {e}")
+    
+    response = send_file(file_path, as_attachment=True, download_name=os.path.basename(file_path))
+    response.call_on_close(lambda: remove_file_after_send(file_path))
+    return response

@@ -197,11 +197,36 @@ function changeConversationName(conversation_id){
     console.log(conversation_id);
 }
 
-function downloadFile(file_id, file_type) {
-    console.log("Descargando archivo ")
-    console.log(file_id);
-    console.log(file_type);
+function downloadFile(file_id, file_type){
+    fetch(downloadFileUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'file_id': file_id,
+            'file_type': file_type
+        })
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.blob();
+    }).then(blob => {
+        // Crear un enlace temporal para descargar el archivo
+        var a = document.createElement('a');
+        var url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = file_id + '.' + file_type; // Usa el nombre de archivo deseado
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url); // Liberar memoria
+        document.body.removeChild(a);
+    }).catch(error => {
+        console.error('Error al descargar el archivo:', error);
+    });
 }
+
 
 // Cargar mensajes al cargar la página
 loadMessages();

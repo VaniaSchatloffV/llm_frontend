@@ -1,3 +1,4 @@
+import os
 from flask.json import jsonify
 from flask import session
 from helpers import api_helper
@@ -59,5 +60,10 @@ def download_file(file_id: int, file_type: str):
     body = {
         "file_id": file_id
     }
-    conversations = api_helper.get(url= endpoint, body=body)
-    return conversations
+    path ="/tmp/" + str(file_id) + "." + file_type
+    data = api_helper.get_file(url= endpoint, body=body)
+    with open(path, 'w') as file:
+        file.write(data)
+    return {
+        "file_path" : path
+    }
