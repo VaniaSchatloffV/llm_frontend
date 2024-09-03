@@ -5,7 +5,7 @@ from helpers import api_helper
 
 def ping():
     endpoint = "/ping/"
-    api_helper.get(api_helper.api_url + endpoint)
+    return api_helper.get(api_helper.api_url + endpoint)
 
 def send_message(prompt: str, conversation_id: int, user_id: int):
     endpoint = "/sendMessage/"
@@ -54,13 +54,13 @@ def set_conversation(conversation_id: int):
 
 def download_file(file_id: int, file_type: str):
     if file_type == "csv":
-        endpoint = "/download/csv/"
+        endpoint = "/download/csv"
     if file_type == "xlsx":
-        endpoint = "/download/xlsx/"
+        endpoint = "/download/xlsx"
     body = {
         "file_id": file_id
     }
-    path ="/tmp/" + str(file_id) + "." + file_type
+    path ="temp_files/" + str(file_id) + "." + file_type
     data = api_helper.get_file(url= endpoint, body=body)
     with open(path, 'w') as file:
         file.write(data)

@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
-from functools import lru_cache
 
 class Settings(BaseSettings):
+    environment : str
     flask_app : str
     flask_run_host : str
     flask_debug : int
@@ -17,6 +17,5 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-@lru_cache()
 def get_settings():
     return Settings()
