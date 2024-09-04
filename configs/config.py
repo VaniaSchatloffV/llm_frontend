@@ -6,7 +6,6 @@ class Settings(BaseSettings):
     flask_run_host : str
     flask_debug : int
     flask_secret_key : str
-    database_url : str
     postgres_user : str
     postgres_password : str
     postgres_host : str
