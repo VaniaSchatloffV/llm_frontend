@@ -11,6 +11,7 @@ from api.chatbot.chat import llm_blueprint
 from api.functions.chat import chat_blueprint
 from api.functions.conversations import conversations_blueprint
 from api.functions.metrics import metrics_blueprint
+from api.functions.administration import administration_blueprint
 
 settings = get_settings()
 
@@ -33,6 +34,7 @@ app.register_blueprint(user_blueprint, url_prefix='/')
 app.register_blueprint(chat_blueprint, url_prefix='/')
 app.register_blueprint(conversations_blueprint, url_prefix='/')
 app.register_blueprint(metrics_blueprint, url_prefix='/')
+app.register_blueprint(administration_blueprint, url_prefix="/")
 app.register_blueprint(llm_blueprint, url_prefix='/c/')
 
 

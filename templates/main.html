@@ -18,6 +18,7 @@
                 <a href="{{ url_for('function_chat.main_chat') }}">Inicio</a>
                 <a href="{{ url_for('function_conversations.main_conversations') }}">Conversaciones</a>
                 <a href="{{ url_for('function_metrics.main_metrics') }}">Métricas</a>
+                <a href="{{ url_for('function_administration.main_administration') }}">Administación</a>
             </nav>
             <form action="{{ url_for('users.logout') }}" method="get" style="display: inline;">
                 <button type="submit" class="logout">Cerrar sesión</button>
