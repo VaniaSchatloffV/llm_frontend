@@ -185,7 +185,7 @@ function updateConversations(conversations) {
         button.style.width = '50px'
         button.addEventListener('click', function(event) {
             event.stopPropagation();
-            changeConversationName(conversation.id);
+            changeConversationName(conversation.id, button, link);
         });
         container.appendChild(button);
         conversationsBar.appendChild(container);
@@ -193,8 +193,39 @@ function updateConversations(conversations) {
 }
 
 
-function changeConversationName(conversation_id){
-    console.log(conversation_id);
+function changeConversationName(conversation_id, button, link) {
+    button.disabled = true;
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.value = link.textContent;
+    input.className = 'input-conversation-name';
+    link.innerHTML = '';
+    link.appendChild(input);
+    input.focus();
+    input.addEventListener('blur', function() {
+        link.textContent = input.value;
+    });
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            if(input.value == ''){
+                link.textContent = "Conversación " + conversation_id;
+            }else{
+                link.textContent = input.value;
+            }
+            fetch(changeNameUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'conversation_id': conversation_id,
+                    'name' : input.value
+                })
+            }).then(
+                button.disabled = false
+            );
+        }
+    });
 }
 
 function downloadFile(file_id, file_type){

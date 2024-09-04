@@ -56,3 +56,13 @@ def download_file():
     response = send_file(file_path, as_attachment=True, download_name=os.path.basename(file_path))
     response.call_on_close(lambda: remove_file_after_send(file_path))
     return response
+
+
+@llm_blueprint.route('/change_conversation_name/', methods=['POST'])
+@login_required
+def change_conversation_name():
+    data = request.get_json()
+    conversation_id = data.get('conversation_id')
+    name = data.get('name')
+    return llm_controller.change_conversation_name(conversation_id, name)
+

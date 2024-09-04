@@ -67,3 +67,10 @@ def download_file(file_id: int, file_type: str):
     return {
         "file_path" : path
     }
+
+def change_conversation_name(conversation_id: int, name: str):
+    body = {
+        "conversation_id": conversation_id,
+        "name": name
+    }
+    return api_helper.post(url = "/changeConversationName/", body=body)
