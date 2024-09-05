@@ -74,3 +74,12 @@ def change_conversation_name(conversation_id: int, name: str):
         "name": name
     }
     return api_helper.post(url = "/changeConversationName/", body=body)
+
+def get_conversations_table(limit = 10, offset = 0):
+    endpoint = "/getConversationTable/"
+    body = {
+        "limit" : limit,
+        "offset" : offset
+    }
+    conversations_table = api_helper.get(url= endpoint, body=body)
+    return conversations_table

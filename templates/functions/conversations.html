@@ -1,1 +1,44 @@
-<h1>conversation page</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Conversaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/conversation_style.css') }}">
+</head>
+<body>
+
+    <div>
+        <label for="sort">Ordenar por</label>
+        <select id="sort">
+            <option value="conversation_id">Id conversación</option>
+            <option value="user_id">Id usuario</option>
+        </select>
+        <select id="sort_way">
+            <option value="desc">Descendente</option>
+            <option value="asc">Ascendente</option>
+            <!-- Agrega más opciones si es necesario -->
+        </select>
+        <button class="filter-button">Filtrar</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr id = "index">
+                <!-- Aqui se agregan los nombres de las columnas -->
+            </tr>
+        </thead>
+        <tbody id ="body">
+            <!-- Aqui se agregan las filas -->
+        </tbody>
+    </table>
+
+    <div class="pagination" id="paginator">
+        <!-- Botones de paginación -->
+    </div>
+    <script>
+        const getConversationsTableUrl = "{{ url_for('conv.get_conversation_table') }}";
+    </script>
+    <script src="{{ url_for('static', filename='scripts/conversation_script.js') }}"></script>
+</body>
+</html>

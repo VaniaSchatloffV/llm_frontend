@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, session
 from decorators.login_decorator import login_required
 
-conversations_blueprint = Blueprint('function_conversations', __name__)
+conv_blueprint = Blueprint('function_conversations', __name__)
 
-@conversations_blueprint.get('/conversations/')
+@conv_blueprint.get('/conversations/')
 @login_required
 def main_conversations():
     name = session.get('user_name')

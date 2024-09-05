@@ -8,8 +8,9 @@ from markupsafe import escape
 
 from api.login.users import user_blueprint
 from api.chatbot.chat import llm_blueprint
+from api.functions.conversations import conv_blueprint
 from api.functions.chat import chat_blueprint
-from api.functions.conversations import conversations_blueprint
+from api.chatbot.conversation import conversation_blueprint
 from api.functions.metrics import metrics_blueprint
 from api.functions.administration import administration_blueprint
 
@@ -32,10 +33,11 @@ def after_request(response):
 
 app.register_blueprint(user_blueprint, url_prefix='/')
 app.register_blueprint(chat_blueprint, url_prefix='/')
-app.register_blueprint(conversations_blueprint, url_prefix='/')
+app.register_blueprint(conv_blueprint, url_prefix='/')
 app.register_blueprint(metrics_blueprint, url_prefix='/')
 app.register_blueprint(administration_blueprint, url_prefix="/")
 app.register_blueprint(llm_blueprint, url_prefix='/c/')
+app.register_blueprint(conversation_blueprint, url_prefix='/conv/')
 
 
 if __name__ == '__main__':
