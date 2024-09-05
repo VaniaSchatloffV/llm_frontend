@@ -10,6 +10,7 @@ conversation_blueprint = Blueprint('conv', __name__)
 
 
 @conversation_blueprint.route('/get_conversation_table/', methods=['POST'])
+@login_required
 def get_conversation_table():
     data = request.get_json()
     limit = data.get("limit")

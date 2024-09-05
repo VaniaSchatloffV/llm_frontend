@@ -19,12 +19,14 @@ def send_message():
     return jsonify({'success': True, 'messages': llm_controller.get_conversation(conversation_id=session['conversation_id'])})
 
 @llm_blueprint.route('/get_messages/', methods=['GET'])
+@login_required
 def get_messages():
     #data = request.get_json()
     #conversation_id = data.get("conversation_id")
     return jsonify(llm_controller.get_conversation(conversation_id=session['conversation_id']))
 
 @llm_blueprint.route('/get_conversations/', methods=['GET'])
+@login_required
 def get_conversations():
     #data = request.get_json()
     #conversation_id = data.get("conversation_id")
