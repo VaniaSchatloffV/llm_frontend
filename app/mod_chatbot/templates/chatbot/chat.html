@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chat</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_style.css') }}">
+    </head>
+
+<body>
+    <div class="sidebar bar-block card animate-left" style="display:none" id="mySidebar">
+        <button class="button large" onclick="close_sidebar()">Cerrar</button>
+        <div class="conversations" id="conversations">
+            <!-- Aquí se mostrarán las conversaciones -->
+        </div>
+    </div>
+
+    <div id="main">
+
+        <div class="teal">
+            <button id="openNav" class="button xlarge" onclick="open_sidebar()">&#9776;</button>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <!-- Aquí se mostrarán los mensajes -->
+            </div>
+            <div class="chat-input">
+                <form id="chat-form" method="post">
+                    <input type="text" id="message" name="message" placeholder="Escribe tu mensaje..." required>
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const sendMessageUrl = "{{ url_for('chatbot.send_message') }}";
+        const getMessagesUrl = "{{ url_for('chatbot.get_messages') }}";
+        const getConversationsUrl = "{{ url_for('chatbot.get_conversations') }}";
+        const setConversationsUrl = "{{ url_for('chatbot.set_conversation') }}";
+        const downloadFileUrl = "{{ url_for('chatbot.download_file') }}";
+        const changeNameUrl = "{{ url_for('chatbot.change_conversation_name') }}"
+    </script>
+    <script src="{{ url_for('static', filename='scripts/chat_script.js') }}"></script>
+</body>
+
+</html>

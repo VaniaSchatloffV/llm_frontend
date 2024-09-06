@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_style.css') }}">
+</head>
+<body>
+    {% include 'flash_messages.html' %}
+    {% block content %}{% endblock %}
+    <div class="login-container">
+        <img src="../static/images/logo.png" alt="Logo">
+        <form action="/register/" method="post">
+            <div class="form-group flex-container">
+                <div class="form-group-item">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" name="name" placeholder="Pedro" required>
+                </div>
+                <div class="form-group-item">
+                    <label for="lastname">Apellido</label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Torres" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Ingrese su email:</label>
+                <input type="email" id="email" name="email" placeholder="email@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Ingrese su contraseña:</label>
+                <input type="password" id="password" name="password" placeholder="**********" required>
+            </div>
+            <div class="form-group">
+                <label for="password_review">Ingrese su contraseña nuevamente:</label>
+                <input type="password" id="password_review" name="password_review" placeholder="**********" required>
+            </div>
+            <button type="submit" class="login-button">Me quiero registrar</button>
+        </form>
+        <form action="/" method="get">
+            <button type="submit" class="register-button">¿Tienes cuenta? Haz clic aquí</button>
+        </form>
+    </div>
+</body>
+</html>
