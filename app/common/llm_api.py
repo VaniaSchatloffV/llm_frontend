@@ -1,14 +1,17 @@
-import os
+import io
 from flask.json import jsonify
 from flask import session
 from . import api_conn
+from instance.config import get_settings
+
+settings = get_settings()
 
 def ping():
     endpoint = "/ping/"
     return api_conn.get(api_conn.api_url + endpoint)
 
 def send_message(prompt: str, conversation_id: int, user_id: int):
-    endpoint = "/sendMessage/"
+    endpoint = "/chat/sendMessage/"
     body = {
         "prompt": prompt,
         "conversation_id": conversation_id,
@@ -17,7 +20,7 @@ def send_message(prompt: str, conversation_id: int, user_id: int):
     return api_conn.post(url= endpoint, body=body)
 
 def get_conversation(conversation_id: int):
-    endpoint = "/getConversationMessages/"
+    endpoint = "/chat/getConversationMessages/"
     body = {
         "conversation_id": conversation_id
     }
@@ -37,7 +40,7 @@ def get_conversation(conversation_id: int):
 
 
 def get_user_conversations(user_id: int):
-    endpoint = "/getConversations/"
+    endpoint = "/chat/getConversations/"
     body = {
         "user_id": user_id
     }
@@ -54,29 +57,35 @@ def set_conversation(conversation_id: int):
 
 def download_file(file_id: int, file_type: str):
     if file_type == "csv":
-        endpoint = "/download/csv"
-    if file_type == "xlsx":
-        endpoint = "/download/xlsx"
+        endpoint = "/files/download/csv/"
+    elif file_type == "xlsx":
+        endpoint = "/files/download/xlsx/"
+    
     body = {
         "file_id": file_id
     }
-    path ="temp_files/" + str(file_id) + "." + file_type
-    data = api_conn.get_file(url= endpoint, body=body)
-    with open(path, 'w') as file:
-        file.write(data)
-    return {
-        "file_path" : path
-    }
+    path = settings.temp_files + str(file_id) + "." + file_type
+    response = api_conn.get_file(url=endpoint, body=body)
+    if response:
+        with open(path, 'wb') as file:
+            for chunk in response:
+                if chunk:
+                    file.write(chunk)
+    
+        return {
+            "file_path" : path
+        }
+
 
 def change_conversation_name(conversation_id: int, name: str):
     body = {
         "conversation_id": conversation_id,
         "name": name
     }
-    return api_conn.post(url = "/changeConversationName/", body=body)
+    return api_conn.post(url = "/chat/changeConversationName/", body=body)
 
 def get_conversations_table(limit = 10, offset = 0):
-    endpoint = "/getConversationTable/"
+    endpoint = "/chat/getConversationTable/"
     body = {
         "limit" : limit,
         "offset" : offset

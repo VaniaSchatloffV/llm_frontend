@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     postgres_port : int
     postgres_db : str
     api_url : str
+    temp_files : str
     
     class Config:
         env_file = ".env"
