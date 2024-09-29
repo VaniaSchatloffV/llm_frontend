@@ -20,8 +20,13 @@
         <div class="teal">
             <button id="openNav" class="button xlarge" onclick="open_sidebar()">&#9776;</button>
         </div>
+        
         <div class="chat-container">
+            <div id="loading-spinner" style="display: block;">
+                <div class="spinner"></div>
+            </div>
             <div class="chat-messages" id="chat-messages">
+                
                 <!-- Aquí se mostrarán los mensajes -->
             </div>
             <div class="chat-input">
@@ -39,6 +44,7 @@
         const setConversationsUrl = "{{ url_for('chatbot.set_conversation') }}";
         const downloadFileUrl = "{{ url_for('chatbot.download_file') }}";
         const changeNameUrl = "{{ url_for('chatbot.change_conversation_name') }}"
+        const checkFileUrl = "{{ url_for('chatbot.check_file') }}"
     </script>
     <script src="{{ url_for('static', filename='scripts/chat_script.js') }}"></script>
 </body>

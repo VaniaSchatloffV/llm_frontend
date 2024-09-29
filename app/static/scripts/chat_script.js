@@ -42,6 +42,8 @@ document.getElementById('chat-form').addEventListener('submit', function(event) 
 });
 
 function updateChatMessages(messages) {
+    var loadingSpinner = document.getElementById('loading-spinner');
+    loadingSpinner.style.display = 'block';
     if(!messages){
         messages = []
     }
@@ -72,8 +74,25 @@ function updateChatMessages(messages) {
             var link = document.createElement('a');
             link.className = 'chat-messages button a';
             link.textContent = "Descargar";
-            link.addEventListener('click', function() {
-                downloadFile(msg.content.file_id, msg.content.file_type);
+            fetch(checkFileUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'file_id': msg.content.file_id,
+                    'file_type': msg.content.file_type
+                })
+            }).then(response => response.json()).then(data => {
+                if(data.result){
+                    link.title = "";
+                    link.addEventListener('click', function() {
+                        downloadFile(msg.content.file_id, msg.content.file_type);
+                    });
+                }else{
+                    link.classList.add('disabled');
+                    link.title = "Archivo ya no está disponible";
+                }
             });
             messageDiv.appendChild(link);
         }
@@ -86,6 +105,7 @@ function updateChatMessages(messages) {
         chatMessages.appendChild(messageDiv);
     });
     // Desplazarse al final del contenedor de mensajes
+    loadingSpinner.style.display = 'none';
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 

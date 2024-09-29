@@ -70,3 +70,12 @@ def main_chat():
     role = session.get('user_role')
     chat_template = render_template('chat.html')
     return render_template('main.html', name=name, lastname=lastname, user_type=role, data=chat_template)
+
+@chatbot_bp.route('/checkFile/', methods=['POST'])
+@login_required
+def check_file():
+    data = request.get_json()
+    file_id = data.get('file_id')
+    file_type = data.get('file_type')
+    exists = llm_api.check_file(file_id, file_type)
+    return {"result" : exists}

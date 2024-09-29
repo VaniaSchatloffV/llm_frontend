@@ -92,3 +92,12 @@ def get_conversations_table(limit = 10, offset = 0):
     }
     conversations_table = api_conn.get(url= endpoint, body=body)
     return conversations_table
+
+def check_file(file_id: int, file_type: str):
+    endpoint = "/files/check/"
+    body = {
+        "file_id": file_id,
+        "file_type": file_type
+    }
+    exists = api_conn.get(url = endpoint, body = body)
+    return exists
