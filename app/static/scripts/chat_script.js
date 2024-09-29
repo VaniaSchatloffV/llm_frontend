@@ -177,7 +177,7 @@ function updateConversations(conversations) {
     // Nueva conversación
     var link_name = '+ Nueva conversación';
     var link = document.createElement('a');
-    link.className = 'button conversation-link';
+    link.className = 'button sidebar-link';
     link.textContent = link_name;
     link.addEventListener('click', function() {
         setConversationId(0);
@@ -191,7 +191,7 @@ function updateConversations(conversations) {
         container.className = 'conversation-container';
         var link = document.createElement('a');
         link.id = 'link-conversation-' + conversation.id;
-        link.className = 'button conversation-link';
+        link.className = 'button sidebar-link';
         link.textContent = link_name;
         link.addEventListener('click', function() {
             setConversationId(conversation.id);
@@ -199,7 +199,7 @@ function updateConversations(conversations) {
         });
         container.appendChild(link);
         var button = document.createElement('a');
-        button.className = 'button conversation-link';
+        button.className = 'button sidebar-link';
         button.textContent = '🖉';
         button.style.textAlign = "center";
         button.style.width = '50px'

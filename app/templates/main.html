@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OncoData</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_style.css') }}">
 </head>
@@ -19,7 +18,7 @@
                 <a href="{{ url_for('chatbot.main_chat') }}">Inicio</a>
                 <a href="{{ url_for('conv.main_conversations') }}">Conversaciones</a>
                 <a href="{{ url_for('metric.main_metrics') }}">Métricas</a>
-                <a href="{{ url_for('admin.main_administration') }}">Administación</a>
+                <a href="{{ url_for('admin.main_administration') }}">Administración</a>
             </nav>
             <form action="{{ url_for('auth.logout') }}" method="get" style="display: inline;">
                 <button type="submit" class="logout">Cerrar sesión</button>
@@ -28,8 +27,5 @@
     </header>
     {% include 'flash_messages.html' %}
     {% block content %}{% endblock %}
-    <div>
-        {{data|safe}}
-    </div>
 </body>
 </html>

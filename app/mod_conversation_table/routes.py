@@ -11,8 +11,8 @@ def main_conversations():
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    conversations_template = render_template('conversations.html')
-    return render_template('main.html', name=name, lastname=lastname, user_type=role, data=conversations_template)
+    conversations_template = render_template('conversations.html', name=name, lastname=lastname, user_type=role)
+    return conversations_template
 
 @conv_bp.route('/get_conversation_table/', methods=['POST'])
 @login_required
