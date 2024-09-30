@@ -1,5 +1,8 @@
-function sendMessage(message){
-    loadOneMessage(message);
+const loadingSpinnerChat = document.getElementById('loading-spinner-conversation');
+const loadingSpinnerSidebar = document.getElementById('loading-spinner-sidebar');
+
+async function sendMessage(message){
+    await loadOneMessage(message);
     var submitButton = document.querySelector('#chat-form button[type="submit"]');
     var messageInput = document.getElementById('message');
     fetch(sendMessageUrl, {
@@ -24,26 +27,24 @@ function sendMessage(message){
         submitButton.disabled = false;
         messageInput.disabled = false;
     });
-}
+    }
 
-document.getElementById('chat-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    var submitButton = document.querySelector('#chat-form button[type="submit"]');
-    var messageInput = document.getElementById('message');
+        var submitButton = document.querySelector('#chat-form button[type="submit"]');
+        var messageInput = document.getElementById('message');
 
-    // Deshabilitar el botón y el campo de entrada
-    submitButton.disabled = true;
-    messageInput.disabled = true;
+        // Deshabilitar el botón y el campo de entrada
+        submitButton.disabled = true;
+        messageInput.disabled = true;
 
-    var message = messageInput.value;
-    sendMessage(message)
-    
+        var message = messageInput.value;
+        sendMessage(message);
+        
 });
 
-function updateChatMessages(messages) {
-    var loadingSpinner = document.getElementById('loading-spinner');
-    loadingSpinner.style.display = 'block';
+async function updateChatMessages(messages) {
     if(!messages){
         messages = []
     }
@@ -105,20 +106,22 @@ function updateChatMessages(messages) {
         chatMessages.appendChild(messageDiv);
     });
     // Desplazarse al final del contenedor de mensajes
-    loadingSpinner.style.display = 'none';
+    loadingSpinnerChat.style.display = 'none';
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 
-function loadMessages() {
+async function loadMessages() {
+    loadingSpinnerChat.style.display = 'block';
     fetch(getMessagesUrl).then(response => response.json()).then(data => {
         updateChatMessages(data.messages);
     });
 }
 
-function loadOneMessage(message) {
+async function loadOneMessage(message) {
     var msg = {"role": "user", "content": message};
     fetch(getMessagesUrl).then(response => response.json()).then(data => {
+        loadingSpinnerChat.style.display = 'block';
         if(data.messages){
             data.messages.push(msg);
             updateChatMessages(data.messages);
@@ -149,6 +152,7 @@ function close_sidebar() {
 }
 
 function loadConversations() {
+    loadingSpinnerSidebar.style.display = 'block';
     fetch(getConversationsUrl).then(response => response.json()).then(data => {
         updateConversations(data);
     });
@@ -165,6 +169,7 @@ function setConversationId(conversationId) {
         })
     }).then(response => response.json()).then(data => {
         if (data.success) {
+            loadingSpinnerChat.style.display = 'block';
             loadMessages();
         }
     });
@@ -207,9 +212,20 @@ function updateConversations(conversations) {
             event.stopPropagation();
             changeConversationName(conversation.id, button, link);
         });
+        var button_elim = document.createElement('a');
+        button_elim.className = 'button sidebar-link';
+        button_elim.textContent = '🗑';
+        button_elim.style.textAlign = "center";
+        button_elim.style.width = '50px'
+        button_elim.addEventListener('click', function(event) {
+            event.stopPropagation();
+            console.log("Eliminar conversacion");
+        });
         container.appendChild(button);
+        container.appendChild(button_elim);
         conversationsBar.appendChild(container);
     });
+    loadingSpinnerSidebar.style.display = 'none';
 }
 
 

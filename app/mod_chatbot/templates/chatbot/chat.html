@@ -10,6 +10,9 @@
     <div class="sidebar bar-block card animate-left" style="display:none" id="mySidebar">
         <button class="button large" onclick="close_sidebar()">Cerrar</button>
         <div class="conversations" id="conversations">
+            <div id="loading-spinner-sidebar" class="loading-spinner" style="display: block;"></div>
+                <div class="spinner"></div>
+            </div>
             <!-- Aquí se mostrarán las conversaciones -->
         </div>
     </div>
@@ -21,7 +24,7 @@
         </div>
         
         <div class="chat-container">
-            <div id="loading-spinner" style="display: block;">
+            <div id="loading-spinner-conversation" class="loading-spinner" style="display: block;">
                 <div class="spinner"></div>
             </div>
             <div class="chat-messages" id="chat-messages">

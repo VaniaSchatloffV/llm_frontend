@@ -208,7 +208,7 @@ main {
 .main,#main{transition:margin-left .4s}
 
 
-#loading-spinner {
+.loading-spinner {
     position: absolute;
     top: 50%;
     left: 50%;
