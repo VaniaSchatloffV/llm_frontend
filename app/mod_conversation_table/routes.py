@@ -20,4 +20,6 @@ def get_conversation_table():
     data = request.get_json()
     limit = data.get("limit")
     offset = data.get("offset")
-    return jsonify(llm_api.get_conversations_table(limit, offset))
+    order_by = data.get("order_by")
+    order_way = data.get("order_way")
+    return jsonify(llm_api.get_conversations_table(limit, offset, order_by, order_way))

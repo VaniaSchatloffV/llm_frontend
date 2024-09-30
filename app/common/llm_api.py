@@ -84,13 +84,21 @@ def change_conversation_name(conversation_id: int, name: str):
     }
     return api_conn.post(url = "/chat/changeConversationName/", body=body)
 
-def get_conversations_table(limit = 10, offset = 0):
+def get_conversations_table(limit = 10, offset = 0, order_by = "conversation_id", order_way = "desc"):
     endpoint = "/chat/getConversationTable/"
     body = {
         "limit" : limit,
-        "offset" : offset
+        "offset" : offset,
+        "order_by" : order_by,
+        "order_way" : order_way
     }
     conversations_table = api_conn.get(url= endpoint, body=body)
+    if conversations_table:
+        data = conversations_table["data"]
+        for i in range(len(data)):
+            if data[i].get("Consulta generada") is not None:
+                data[i]["Consulta generada"] = data[i]["Consulta generada"].replace('\n', '<br>')
+        conversations_table["data"] = data
     return conversations_table
 
 def check_file(file_id: int, file_type: str):
