@@ -12,12 +12,12 @@
     {% block content %}{% endblock %}
     <div class="login-container">
         <img src="static/images/logo.png" alt="Logo">
-        <form action="/login" method="post">
+        <form action="{{ url_for('auth.login') }}" method="post">
             <input type="email" name="email" placeholder="email@ejemplo.com" required>
             <input type="password" name="password" placeholder="**********" required>
             <button type="submit" class="login-button">Iniciar sesión</button>
         </form>
-        <form action="/register" method="get">
+        <form action="{{ url_for('auth.register_view') }}" method="get">
             <button type="submit" class="register-button">¿No tienes cuenta? Haz clic aquí</button>
         </form>
         <a href="#">Olvidé mi contraseña</a>

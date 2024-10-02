@@ -1,15 +1,15 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <head>
-        <title>Chat</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_style.css') }}">
-    </head>
+<head>
+    <title>Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_style.css') }}">
+</head>
 
 <body>
     <div class="sidebar bar-block card animate-left" style="display:none" id="mySidebar">
         <button class="button large" onclick="close_sidebar()">Cerrar</button>
-        <div class="conversations" id="conversations">
+        <div id="conversations">
             <div id="loading-spinner-sidebar" class="loading-spinner" style="display: block;"></div>
                 <div class="spinner"></div>
             </div>
@@ -23,7 +23,7 @@
             <button id="openNav" class="button xlarge" onclick="open_sidebar()">&#9776;</button>
         </div>
         
-        <div class="chat-container">
+        <div class="container">
             <div id="loading-spinner-conversation" class="loading-spinner" style="display: block;">
                 <div class="spinner"></div>
             </div>
@@ -32,9 +32,9 @@
                 <!-- Aquí se mostrarán los mensajes -->
             </div>
             <div class="chat-input">
-                <form id="chat-form" method="post">
+                <form id="form" method="post">
                     <input type="text" id="message" name="message" placeholder="Escribe tu mensaje..." required>
-                    <button type="submit">Enviar</button>
+                    <button class="button" type="submit">Enviar</button>
                 </form>
             </div>
         </div>
@@ -49,6 +49,7 @@
         const checkFileUrl = "{{ url_for('chatbot.check_file') }}"
     </script>
     <script src="{{ url_for('static', filename='scripts/chat_script.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/common_script.js') }}"></script>
 </body>
 
 </html>

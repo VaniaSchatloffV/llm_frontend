@@ -233,3 +233,18 @@ main {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    height: 75vh;
+    position: relative;
+    padding: 20px;
+}

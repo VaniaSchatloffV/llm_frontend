@@ -1,23 +1,4 @@
-.chat-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: #fff;
-    height: 75vh;
-    position: relative;
-}
-
-.chat-header {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    background-color:  #ccc;
-}
-
+/* Genera un espacio de un tamaño fijo que incluye los mensajes. */
 .chat-messages {
     flex-grow: 1;
     padding: 10px;
@@ -27,6 +8,7 @@
     max-height: 80vh;
 }
 
+/* Cada mensaje */
 .chat-messages div {
     display: flex;
     flex-direction: column;
@@ -35,7 +17,7 @@
     border-radius: 5px;
     background-color: #f1f1f1;
 }
-
+/* Botones de  descarga, opciones*/
 .chat-messages div a.button{
     margin-top: 5px;
     margin-bottom: 5px;
@@ -59,11 +41,17 @@
     pointer-events: none;
 }
 
+/* Entrada para el chat y boton para enviar mensajes*/
 .chat-input {
     display: flex;
     padding: 10px;
     background-color: #f1f1f1;
     border-top: 1px solid #ccc;
+}
+
+.chat-input form {
+    display: flex;
+    width: 100%;
 }
 
 .chat-input input[type="text"] {
@@ -93,7 +81,3 @@
     background-color: #ec971f;
 }
 
-.chat-input form {
-    display: flex;
-    width: 100%;
-}

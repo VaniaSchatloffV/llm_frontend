@@ -12,7 +12,7 @@
     {% block content %}{% endblock %}
     <div class="login-container">
         <img src="../static/images/logo.png" alt="Logo">
-        <form action="/register/" method="post">
+        <form action="{{ url_for('auth.register') }}" method="post">
             <div class="form-group flex-container">
                 <div class="form-group-item">
                     <label for="name">Nombre</label>
@@ -37,7 +37,7 @@
             </div>
             <button type="submit" class="login-button">Me quiero registrar</button>
         </form>
-        <form action="/" method="get">
+        <form action="{{ url_for('auth.index') }}" method="get">
             <button type="submit" class="register-button">¿Tienes cuenta? Haz clic aquí</button>
         </form>
     </div>

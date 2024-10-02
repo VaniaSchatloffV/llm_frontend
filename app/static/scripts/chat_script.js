@@ -3,7 +3,7 @@ const loadingSpinnerSidebar = document.getElementById('loading-spinner-sidebar')
 
 async function sendMessage(message){
     await loadOneMessage(message);
-    var submitButton = document.querySelector('#chat-form button[type="submit"]');
+    var submitButton = document.querySelector('#form button[type="submit"]');
     var messageInput = document.getElementById('message');
     fetch(sendMessageUrl, {
         method: 'POST',
@@ -29,7 +29,7 @@ async function sendMessage(message){
     });
     }
 
-    document.getElementById('chat-form').addEventListener('submit', function(event) {
+    document.getElementById('form').addEventListener('submit', function(event) {
         event.preventDefault();
 
         var submitButton = document.querySelector('#chat-form button[type="submit"]');
@@ -130,25 +130,6 @@ async function loadOneMessage(message) {
         }
         
     });
-}
-
-function open_sidebar() {
-    document.getElementById("main").style.marginLeft = "25%";
-    document.getElementById("mySidebar").style.width = "25%";
-    document.getElementById("mySidebar").style.display = "block";
-    //document.getElementById("openNav").style.display = 'none';
-    document.getElementById("openNav").style.visibility = 'hidden';
-    document.getElementById("openNav").style.pointerEvents = 'none';
-    loadConversations();
-}
-  
-function close_sidebar() {
-    document.getElementById("main").style.marginLeft = "0%";
-    document.getElementById("mySidebar").style.display = "none";
-    //document.getElementById("openNav").style.display = "inline-block";
-    document.getElementById("openNav").style.visibility = 'visible';
-    document.getElementById("openNav").style.pointerEvents = 'auto';
-
 }
 
 function loadConversations() {
