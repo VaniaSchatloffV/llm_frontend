@@ -119,35 +119,45 @@ class DB_ORM_Handler(object):
             raise e
 
 
-    def getObjects(self, p_obj, *args, defer_cols=[], columns: Optional[list] = None, order_by: Optional[list] = None, limit: Optional[int] = None, **kwargs):
-        
+    def getObjects(self, p_obj, *args, defer_cols=[], columns: Optional[list] = None, order_by: Optional[list] = None, limit: Optional[int] = None, offset: Optional[int] = None, join_conditions: Optional[list] = None, **kwargs):
+    
         sess = self.session()
+        
+        # Inicia la consulta, con columnas si están especificadas
         query = sess.query(*columns) if columns else sess.query(p_obj)
         
-        # Apply filters
+        # Aplica las condiciones de JOIN si se especifican
+        if join_conditions:
+            for join_cond in join_conditions:
+                query = query.join(*join_cond)
+        
+        # Aplica filtros
         if args:
             query = query.filter(*args)
         if kwargs:
             query = query.filter_by(**kwargs)
 
-        # Apply order by
+        # Ordenar por columnas si se especifica
         if order_by:
             query = query.order_by(*order_by)
 
-        # Defer columns if needed
+        # Deferir columnas si es necesario
         if defer_cols:
             for col in defer_cols:
                 query = query.options(defer(col))
 
-        # Apply limit if specified
+        # Aplica límite si se especifica
         if limit:
             query = query.limit(limit)
+        
+        if offset:
+            query = query.offset(offset)
 
         try:
             results = query.all()
             
             if columns:
-                # Convert tuples to dictionaries or custom objects
+                # Convierte las tuplas a diccionarios u objetos personalizados
                 results = [dict(zip([col.key for col in columns], row)) for row in results]
             return results
 
@@ -156,6 +166,7 @@ class DB_ORM_Handler(object):
             raise e
         finally:
             self.session.remove()
+
 
 
 
@@ -231,6 +242,7 @@ class DB_ORM_Handler(object):
                     sess.commit()
                     done = True
                 except Exception as e:
+                    sess.rollback()
                     error = e
                     time.sleep(5)
             
@@ -238,7 +250,10 @@ class DB_ORM_Handler(object):
                 raise RuntimeError("No se pudo almacenar en DB: ", error)
 
         except Exception as e:
+            if sess:
+                sess.rollback()
             raise e
+            
         finally:
             self.session.remove()
         if get_obj_attr:
@@ -257,3 +272,29 @@ class DB_ORM_Handler(object):
             self.session.remove()
 
         return True
+    
+    def countObjects(self, p_obj, *args, **kwargs):
+        """
+        Cuenta los registros en la tabla especificada, con filtros opcionales.
+        
+        :param p_obj: El modelo de la tabla (ORM class).
+        :param args: Filtros opcionales (e.g. p_obj.id == 5).
+        :param kwargs: Filtros adicionales como clave-valor.
+        :return: El número de registros.
+        """
+        sess = self.session()
+        try:
+            query = sess.query(func.count()).select_from(p_obj)
+            if args:
+                query = query.filter(*args)
+            if kwargs:
+                query = query.filter_by(**kwargs)
+
+            result = query.scalar()
+            return result
+
+        except Exception as e:
+            print("DatabaseError:", e)
+            raise e
+        finally:
+            self.session.remove()

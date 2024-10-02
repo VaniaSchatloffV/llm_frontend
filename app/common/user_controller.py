@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, url_for, request, render_template, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from ..common.DB import DB_ORM_Handler
-from .models.users import UserObject
-from .models.roles import RoleObject
-
+from .DB import DB_ORM_Handler
+from ..mod_users.models.users import UserObject
+from ..mod_users.models.roles import RoleObject
+import json
 
 def login():
     email = request.form.get('email')
@@ -42,10 +42,13 @@ def register():
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     try:
         existing_user = get_user(email)
+        print(existing_user)
         if existing_user != {}:
             flash('El correo electrónico ya está registrado', 'danger')
-            return redirect(url_for('auth.register'))
-        insert_new_user(email, name, lastname, hashed_password)
+            return redirect(url_for('auth.index'))
+        result = insert_new_user(email, name, lastname, hashed_password)
+        if not result:
+            raise Exception("No se ha podido guardar el usuario.")
         flash('Registro exitoso. Por favor, inicia sesión', 'success')
         return redirect(url_for('auth.index'))
     except Exception as e:
@@ -100,5 +103,21 @@ def insert_new_user(email: str, name: str, lastname: str, password: str):
     User.role_id = 2
     with DB_ORM_Handler() as db:
         db.createTable(User)
-        db.saveObject(User)
-        
+        return db.saveObject(User)
+
+def get_all_users(offset = 0, limit = 10):
+    with DB_ORM_Handler() as db:
+        user_role_data = db.getObjects(
+        columns=[UserObject.id, UserObject.name, UserObject.lastname, RoleObject.role_name, UserObject.created_at], 
+        p_obj=UserObject, 
+        defer_cols=[], 
+        order_by=[UserObject.id],
+        limit=limit,  # Si quieres limitar el número de resultados
+        offset=offset,  # Para la paginación si lo necesitas
+        join_conditions=[(RoleObject, UserObject.role_id == RoleObject.id)]
+    )
+    for i in range(len(user_role_data)):
+        row = user_role_data[i]
+        row["created_at"] = row["created_at"].strftime("%Y-%m-%d, %H:%M:%S")
+        user_role_data[i] = row
+    return json.dumps(user_role_data)
