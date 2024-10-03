@@ -1,9 +1,14 @@
+from typing import Optional
 from flask import Blueprint, jsonify, url_for, request, render_template, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from .DB import DB_ORM_Handler
+from .. import get_settings
 from ..mod_users.models.users import UserObject
 from ..mod_users.models.roles import RoleObject
+from ..mod_users.models.permissions import PermissionObject
 import json
+
+settings = get_settings()
 
 def login():
     email = request.form.get('email')
@@ -22,7 +27,6 @@ def login():
     else:
         flash('Email o contraseña inválida', 'danger')
         return redirect(url_for('auth.index'))
-
 
 def register():
     email = request.form.get('email')
@@ -122,14 +126,38 @@ def get_all_users(offset = 0, limit = 10):
         user_role_data[i] = row
     return json.dumps(user_role_data)
 
-def get_all_roles(offset = 0, limit = 10):
+def get_all_roles(offset: Optional[int] = None, limit: Optional[int] = None):
+    if offset is None:
+        offset = 0
+    if limit is None:
+        limit = 10
+    get_roles_query = f"""
+        select
+            r.id,
+            r.role_name,
+            CASE WHEN STRING_AGG(p.name, ', ') is NULL then 'sin permisos' ELSE STRING_AGG(p.name, ', ') END AS permissions
+        from {settings.postgres_schema}.roles r
+        left join {settings.postgres_schema}.role_permission_associations rpa on rpa.role_id = r.id
+        left join {settings.postgres_schema}.permissions p on p.id = rpa.permission_id
+        GROUP BY r.id, r.role_name
+        ORDER BY r.id ASC
+        LIMIT {limit}
+        OFFSET {offset}
+
+    """
     with DB_ORM_Handler() as db:
-        role_data = db.getObjects(
-        columns=[RoleObject.id, RoleObject.role_name], 
-        p_obj=RoleObject, 
+        role_data = db.query(get_roles_query, return_data=True)
+    print(role_data)
+    return json.dumps(role_data)
+
+def get_all_permissions(offset = 0, limit = 10):
+    with DB_ORM_Handler() as db:
+        permission_data = db.getObjects(
+        columns=[PermissionObject.id, PermissionObject.name, PermissionObject.description], 
+        p_obj=PermissionObject, 
         defer_cols=[], 
-        order_by=[RoleObject.id],
+        order_by=[PermissionObject.id],
         limit=limit,
         offset=offset
     )
-    return json.dumps(role_data)
+    return json.dumps(permission_data)

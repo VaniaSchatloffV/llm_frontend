@@ -1,9 +1,15 @@
 import sqlalchemy as sal
 from sqlalchemy.orm import registry
 from sqlalchemy.sql import func
+from ...common.DB import DB_ORM_Handler
+from .roles import RoleObject
 mapper_registry = registry()
 
 Base = mapper_registry.generate_base()
+
+def initialize_data():
+    with DB_ORM_Handler() as db:
+        db.createTable(UserObject)
 
 class UserObject(Base):
     __tablename__ = 'users'
@@ -16,7 +22,7 @@ class UserObject(Base):
     lastname                    = sal.Column('lastname', sal.String(length=128))
     email                       = sal.Column('email', sal.String(length=256))
     password                    = sal.Column('password', sal.String(length=512))
-    role_id                     = sal.Column('role_id', sal.Integer)
+    role_id                     = sal.Column('role_id', sal.Integer, sal.ForeignKey(RoleObject.id))
     created_at                  = sal.Column('created_at', sal.DateTime(timezone=True), server_default=func.now())
     
     def __repr__(self):

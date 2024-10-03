@@ -11,7 +11,9 @@ from .mod_chatbot import chatbot_bp
 from .mod_conversation_table import conv_bp
 from .mod_metric_table import metric_bp
 from .mod_users import auth_bp
+from .mod_users.models import initialize_models
 
+initialize_models()
 
 def create_app():
     settings = get_settings()

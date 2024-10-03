@@ -25,3 +25,10 @@ def get_roles():
     offset = request.args.get('offset')
     limit = request.args.get('limit')
     return user_controller.get_all_roles(offset,limit)
+
+@admin_bp.get('/permissions/')
+@login_required
+def get_permissions():
+    offset = request.args.get('offset')
+    limit = request.args.get('limit')
+    return user_controller.get_all_permissions(offset,limit)

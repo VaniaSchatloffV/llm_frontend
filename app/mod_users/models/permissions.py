@@ -1,9 +1,55 @@
 import sqlalchemy as sal
 from sqlalchemy.orm import registry
 from sqlalchemy.sql import func
+from ...common.DB import DB_ORM_Handler
 mapper_registry = registry()
 
 Base = mapper_registry.generate_base()
+def initialize_data():
+    base_permissions = [{
+                            "id": 1,
+                            "name": "consulta_chatbot",
+                            "description": "Permite al usuario realizar consultas al chatbot."
+                        },
+                        {
+                            "id": 2,
+                            "name": "cambiar_permisos_de_rol",
+                            "description": "Permite al usuario modificar los permisos asignados a los diferentes roles de usuario."
+                        },
+                        {
+                            "id": 3,
+                            "name": "asignar_roles_usuario",
+                            "description": "Permite asignar o modificar los roles de los usuarios."
+                        },
+                        {
+                            "id": 4,
+                            "name": "ver_conversaciones",
+                            "description": "Permite al usuario ver los datos de las conversaciones."
+                        },
+                        {
+                            "id": 5,
+                            "name": "ver_metricas",
+                            "description": "Permite al usuario acceder a los datos de las métricas."
+                        },
+                        {
+                            "id": 6,
+                            "name": "crear_usuarios",
+                            "description": "Permite al usuario crear nuevos usuarios."
+                        },
+                        {
+                            "id": 7,
+                            "name": "borrar_usuarios",
+                            "description": "Permite al usuario eliminar usuarios existentes."
+                        }]
+    with DB_ORM_Handler() as db:
+        permissions = []
+        db.createTable(PermissionObject)
+        for i in base_permissions:
+            perm = PermissionObject()
+            perm.set_dictionary(i)
+            permissions.append(perm)
+        db.saveObject(p_objs=permissions)
+
 
 class PermissionObject(Base):
     __tablename__ = 'permissions'
