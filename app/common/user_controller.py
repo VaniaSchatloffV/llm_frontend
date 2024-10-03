@@ -112,8 +112,8 @@ def get_all_users(offset = 0, limit = 10):
         p_obj=UserObject, 
         defer_cols=[], 
         order_by=[UserObject.id],
-        limit=limit,  # Si quieres limitar el número de resultados
-        offset=offset,  # Para la paginación si lo necesitas
+        limit=limit,
+        offset=offset,
         join_conditions=[(RoleObject, UserObject.role_id == RoleObject.id)]
     )
     for i in range(len(user_role_data)):
@@ -121,3 +121,15 @@ def get_all_users(offset = 0, limit = 10):
         row["created_at"] = row["created_at"].strftime("%Y-%m-%d, %H:%M:%S")
         user_role_data[i] = row
     return json.dumps(user_role_data)
+
+def get_all_roles(offset = 0, limit = 10):
+    with DB_ORM_Handler() as db:
+        role_data = db.getObjects(
+        columns=[RoleObject.id, RoleObject.role_name], 
+        p_obj=RoleObject, 
+        defer_cols=[], 
+        order_by=[RoleObject.id],
+        limit=limit,
+        offset=offset
+    )
+    return json.dumps(role_data)

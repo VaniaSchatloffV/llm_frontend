@@ -170,8 +170,17 @@ main {
 }
 
 @keyframes animateleft {
-    from { left: -300px; opacity: 0 }
-    to { left: 0; opacity: 1 }
+    from { left: -300px; opacity: 0; display: none; }
+    to { left: 0; opacity: 1; display: block; }
+}
+
+.animate-right {
+    animation: animateright 0.4s;
+}
+
+@keyframes animateright {
+    from { right: -300px; opacity: 1; display: block; }
+    to { right: 0; opacity: 0; display: none; }
 }
 
 .teal {

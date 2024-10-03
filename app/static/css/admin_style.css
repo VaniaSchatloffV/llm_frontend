@@ -1,0 +1,81 @@
+h2 {
+    font-size: 1.5em;
+    margin-bottom: 1px;
+    margin-top: 0%;
+    font-family: arial;
+    font-weight: bold;
+    color: #3b3b3b;
+}
+
+h4 {
+    font-size: 1em;
+    margin-top: 0%;
+    margin-bottom: 1px;
+    font-family: arial;
+    font-weight: lighter;
+    color: gray;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+}
+
+.item-details .icon {
+    font-size: 1.5em;
+    margin-right: 15px;
+}
+
+.item-details .text {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-details .text span {
+    font-size: 1.1em;
+}
+
+.item-details .text small {
+    color: #777;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+}
+
+.item-actions .role {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.item-actions .role:hover {
+    color: #ec971f;
+}
+
+.item-actions .icon-role {
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.item-actions .icon-role:hover {
+    color: #ec971f;
+}
