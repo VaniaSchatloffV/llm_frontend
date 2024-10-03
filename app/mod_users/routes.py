@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session
-from . import user_controller
+from ..common import user_controller
 from ..decorators.login_decorator import login_required
 from . import auth_bp
 
