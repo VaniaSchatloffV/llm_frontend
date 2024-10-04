@@ -1,21 +1,5 @@
-body {
+.body {
     font-family: Arial, sans-serif;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 8px;
-    text-align: left;
-    border: 1px solid #dddddd;
-}
-th {
-    background-color: #003d75;
-    color: white;
-}
-td {
-    background-color: #f3f6f9;
 }
 .pagination {
     margin-top: 20px;

@@ -106,11 +106,13 @@ function createUserItem(user) {
 
     // Crear el contenedor de acciones
     const actions = createElement('div', 'item-actions');
-    const button_1_span = createElement('span', 'role', 'A');
-    const button_2_span = createElement('span', 'icon-role', '⇅');
+    const button_1_span = createElement('span', 'role', '⇅');
+    button_1_span.title = "Cambiar rol";
+    button_1_span.addEventListener('click', function() {
+        createUserRoleModal(id, name + " " + lastname);
+    });
     
     actions.appendChild(button_1_span);
-    actions.appendChild(button_2_span);
 
     // Añadir detalles y acciones al elemento principal 'li'
     item.appendChild(item_detail);
@@ -193,6 +195,68 @@ function createPermissionItem(perm) {
     return item;
 }
 
+
+function createUserRoleModal(user_id, user_full_name){
+    var modal = document.getElementById('modal');
+    modal.style.display='block';
+    var modalContainer = document.getElementById('container-small');
+    var modalCloseButton = createElement("span", "modal-button", "x");
+    modalCloseButton.addEventListener('click', function(){
+        modal.style.display='none';
+    })
+    modalContainer.innerHTML = '';
+    var modalTitle = createElement("h2", "", "Actualizar rol de usuario " + user_full_name);
+    var modalDescription = createElement("p", "", "Seleccione un nuevo rol para el usuario");
+
+    var input = createElement("input", "modal-input")
+    input.type = "text";
+    input.placeholder = "Buscar rol...";
+    input.id = "roleInput";
+    var table = createElement("table", "table");
+    table.id = "tablaRoles";
+    var header_blue = document.createElement("thead");
+    var header = document.createElement("tr");
+    var col1 = createElement("th", "", "Nombre rol");
+    header.appendChild(col1);
+    var col2 = createElement("th", "", "Permisos rol");
+    header.appendChild(col2);
+    header.appendChild(createElement("th"));
+    header_blue.append(header);
+    table.appendChild(header_blue);
+    var tableBody = createElement("tbody");
+    fetch(getRolesUrl)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(role => {
+                var fila = document.createElement("tr");
+                var nombre = createElement("td", "", role.role_name);
+                var permisos = createElement("td", "", role.permissions);
+                var botonAgregarRol = createElement("button", "logout", "Agregar");
+                botonAgregarRol.addEventListener('click', function(){
+                    console.log("AGREGANDO ROL "+role.id + " a usuario " + user_id);
+                });
+                fila.appendChild(nombre);
+                fila.appendChild(permisos);
+                fila.appendChild(botonAgregarRol);
+                tableBody.appendChild(fila);
+            });
+            table.appendChild(tableBody);
+        })
+        .catch(error => {
+            console.error('Error loading roles:', error);
+        });
+
+    input.onkeyup = function() {
+        searchRole();
+    };
+    modalContainer.appendChild(modalCloseButton);
+    modalContainer.appendChild(modalTitle);
+    modalContainer.appendChild(modalDescription);
+    modalContainer.appendChild(input);
+    modalContainer.appendChild(document.createElement("br"));
+    modalContainer.appendChild(table);
+}
+
 function createElement(tag, className = '', textContent = '') {
     const element = document.createElement(tag);
     if (className) element.className = className;
@@ -200,5 +264,23 @@ function createElement(tag, className = '', textContent = '') {
     return element;
 }
 
+function searchRole() {
+    var input, filter, table, tr, td, i;
+    input = document.getElementById("roleInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tablaRoles");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
 
 adminUser();

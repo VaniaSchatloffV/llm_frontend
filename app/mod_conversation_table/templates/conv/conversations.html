@@ -4,6 +4,7 @@
 <head>
     <title>Tabla de Conversaciones</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/conversation_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_style.css') }}">
 </head>
 <body>
 
@@ -29,7 +30,7 @@
         <button class="filter-button" onclick="filter()">Filtrar</button>
     </div>
 
-    <table>
+    <table class="table">
         <thead>
             <tr id = "index">
                 <!-- Aqui se agregan los nombres de las columnas -->
