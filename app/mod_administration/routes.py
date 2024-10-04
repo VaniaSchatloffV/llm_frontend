@@ -32,3 +32,12 @@ def get_permissions():
     offset = request.args.get('offset')
     limit = request.args.get('limit')
     return user_controller.get_all_permissions(offset,limit)
+
+@admin_bp.post('/addRole/')
+@login_required
+def add_role_to_user():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    role_id = data.get('role_id')
+    print(role_id, user_id)
+    return user_controller.add_role_to_user(user_id,role_id)

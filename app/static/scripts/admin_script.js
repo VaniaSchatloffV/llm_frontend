@@ -234,6 +234,7 @@ function createUserRoleModal(user_id, user_full_name){
                 var botonAgregarRol = createElement("button", "logout", "Agregar");
                 botonAgregarRol.addEventListener('click', function(){
                     console.log("AGREGANDO ROL "+role.id + " a usuario " + user_id);
+                    addRoleToUser(role.id, user_id);
                 });
                 fila.appendChild(nombre);
                 fila.appendChild(permisos);
@@ -282,5 +283,20 @@ function searchRole() {
       }
     }
   }
+
+function addRoleToUser(role_id, user_id){
+    console.log(role_id);
+    console.log(user_id);
+    fetch(addRoleUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'role_id': role_id,
+            'user_id': user_id
+        })
+    });
+}
 
 adminUser();

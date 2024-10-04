@@ -161,3 +161,18 @@ def get_all_permissions(offset = 0, limit = 10):
         offset=offset
     )
     return json.dumps(permission_data)
+
+def add_role_to_user(user_id: int, role_id: int):
+    try:
+        with DB_ORM_Handler() as db:
+            updated_rows = db.updateObjects(
+                UserObject,
+                UserObject.id == user_id,
+                role_id=role_id
+            )
+            print(updated_rows)
+            flash("Rol cambiado con éxito", "success")
+            return jsonify({"result":True})
+    except Exception as e:
+        flash("Ha ocurrido un error al actualizar rol")
+        return jsonify({"result":False})
