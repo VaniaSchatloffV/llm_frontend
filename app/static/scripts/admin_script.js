@@ -51,7 +51,6 @@ function loadUsers() {
 function loadRoles() {
     const roles_list = document.getElementById('list-roles');
     roles_list.innerHTML = '';
-
     fetch(getRolesUrl)
         .then(response => response.json())
         .then(data => {
@@ -63,6 +62,8 @@ function loadRoles() {
         .catch(error => {
             console.error('Error loading roles:', error);
         });
+    var createRoleButton = createElement("a", "container-button", "Crear rol")
+    roles_list.appendChild(createRoleButton);
 }
 
 function loadPermissions() {
@@ -83,7 +84,7 @@ function loadPermissions() {
 }
 
 function createUserItem(user) {
-    const { id, name, lastname, role_name } = user;
+    const { id, name, lastname, role_id, role_name } = user;
     
     // Crear el contenedor principal 'li'
     const item = createElement('li', 'item');
@@ -109,7 +110,7 @@ function createUserItem(user) {
     const button_1_span = createElement('span', 'role', '⇅');
     button_1_span.title = "Cambiar rol";
     button_1_span.addEventListener('click', function() {
-        createUserRoleModal(id, name + " " + lastname);
+        createUserRoleModal(id, name + " " + lastname, role_id);
     });
     
     actions.appendChild(button_1_span);
@@ -142,18 +143,19 @@ function createRoleItem(role) {
     text.appendChild(role_text);
     text.appendChild(permisos);
     item_detail.appendChild(text);
+    item.appendChild(item_detail);
 
     // Crear el contenedor de acciones
-    const actions = createElement('div', 'item-actions');
-    const button_1_span = createElement('span', 'role', 'A');
-    const button_2_span = createElement('span', 'icon-role', '⇅');
-    
-    actions.appendChild(button_1_span);
-    actions.appendChild(button_2_span);
-
-    // Añadir detalles y acciones al elemento principal 'li'
-    item.appendChild(item_detail);
-    item.appendChild(actions);
+    if (id != 1 && id != 2){
+        // No agregar botones de modificación de permisos a los roles por defecto
+        const actions = createElement('div', 'item-actions');
+        const button_1_span = createElement('span', 'role', 'A');
+        const button_2_span = createElement('span', 'icon-role', '⇅');
+        
+        actions.appendChild(button_1_span);
+        actions.appendChild(button_2_span);
+        item.appendChild(actions);
+    }
 
     return item;
 }
@@ -195,67 +197,79 @@ function createPermissionItem(perm) {
     return item;
 }
 
+function createUserRoleModal(userId, userFullName, role_id) {
+    const modal = document.getElementById('modal');
+    const modalContainer = document.getElementById('container-small');
+    
+    modal.style.display = 'block';
 
-function createUserRoleModal(user_id, user_full_name){
-    var modal = document.getElementById('modal');
-    modal.style.display='block';
-    var modalContainer = document.getElementById('container-small');
-    var modalCloseButton = createElement("span", "modal-button", "x");
-    modalCloseButton.addEventListener('click', function(){
-        modal.style.display='none';
-    })
     modalContainer.innerHTML = '';
-    var modalTitle = createElement("h2", "", "Actualizar rol de usuario " + user_full_name);
-    var modalDescription = createElement("p", "", "Seleccione un nuevo rol para el usuario");
 
-    var input = createElement("input", "modal-input")
+    const modalCloseButton = createElement("span", "modal-button", "x");
+    modalCloseButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    const modalTitle = createElement("h2", "", `Actualizar rol de usuario ${userFullName}`);
+    const modalDescription = createElement("p", "", "Seleccione un nuevo rol para el usuario");
+
+    const input = createElement("input", "modal-input");
     input.type = "text";
     input.placeholder = "Buscar rol...";
     input.id = "roleInput";
-    var table = createElement("table", "table");
+
+    const table = createTableRole(userId, userFullName, role_id);
+
+    input.addEventListener('keyup', searchRole);
+    
+    modalContainer.append(modalCloseButton, modalTitle, modalDescription, input, document.createElement("br"), table);
+}
+
+function createTableRole(userId, userFullName, userActualRoleId) {
+    const table = createElement("table", "table");
     table.id = "tablaRoles";
-    var header_blue = document.createElement("thead");
-    var header = document.createElement("tr");
-    var col1 = createElement("th", "", "Nombre rol");
-    header.appendChild(col1);
-    var col2 = createElement("th", "", "Permisos rol");
-    header.appendChild(col2);
-    header.appendChild(createElement("th"));
-    header_blue.append(header);
-    table.appendChild(header_blue);
-    var tableBody = createElement("tbody");
+    
+    // Encabezado de la tabla
+    const header = createElement("thead");
+    const headerRow = createElement("tr");
+    const col1 = createElement("th", "", "Nombre rol");
+    const col2 = createElement("th", "", "Permisos rol");
+    
+    headerRow.append(col1, col2, createElement("th"));
+    header.appendChild(headerRow);
+    table.appendChild(header);
+    
+    const tableBody = createElement("tbody");
+    
+    // Obtiene los roles desde el servidor
     fetch(getRolesUrl)
         .then(response => response.json())
         .then(data => {
             data.forEach(role => {
-                var fila = document.createElement("tr");
-                var nombre = createElement("td", "", role.role_name);
-                var permisos = createElement("td", "", role.permissions);
-                var botonAgregarRol = createElement("button", "logout", "Agregar");
-                botonAgregarRol.addEventListener('click', function(){
-                    console.log("AGREGANDO ROL "+role.id + " a usuario " + user_id);
-                    addRoleToUser(role.id, user_id);
+                const row = createElement("tr");
+                const nombre = createElement("td", "", role.role_name);
+                const permisos = createElement("td", "", role.permissions);
+                
+                const buttonAddRole = createElement("button", "logout", "Agregar");
+                buttonAddRole.addEventListener('click', () => {
+                    if (userActualRoleId == role.id) {
+                        confirm("El usuario " + userFullName + " ya es " + role.role_name);
+                    }
+                    else if (confirm("¿Está seguro(a) de cambiar el rol de " + userFullName + " a " + role.role_name + "?") == true){
+                        addRoleToUser(role.id, userId);
+                    }
                 });
-                fila.appendChild(nombre);
-                fila.appendChild(permisos);
-                fila.appendChild(botonAgregarRol);
-                tableBody.appendChild(fila);
+
+                row.append(nombre, permisos, buttonAddRole);
+                tableBody.appendChild(row);
             });
             table.appendChild(tableBody);
         })
         .catch(error => {
             console.error('Error loading roles:', error);
         });
-
-    input.onkeyup = function() {
-        searchRole();
-    };
-    modalContainer.appendChild(modalCloseButton);
-    modalContainer.appendChild(modalTitle);
-    modalContainer.appendChild(modalDescription);
-    modalContainer.appendChild(input);
-    modalContainer.appendChild(document.createElement("br"));
-    modalContainer.appendChild(table);
+    
+    return table; // Retorna la tabla completa
 }
 
 function createElement(tag, className = '', textContent = '') {
@@ -282,11 +296,9 @@ function searchRole() {
         }
       }
     }
-  }
+}
 
 function addRoleToUser(role_id, user_id){
-    console.log(role_id);
-    console.log(user_id);
     fetch(addRoleUrl, {
         method: 'POST',
         headers: {
@@ -296,6 +308,9 @@ function addRoleToUser(role_id, user_id){
             'role_id': role_id,
             'user_id': user_id
         })
+    }).then(response =>{
+        loadUsers();
+        document.getElementById('modal').style.display = "none";
     });
 }
 

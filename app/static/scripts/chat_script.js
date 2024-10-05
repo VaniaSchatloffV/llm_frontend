@@ -3,7 +3,7 @@ const loadingSpinnerSidebar = document.getElementById('loading-spinner-sidebar')
 
 async function sendMessage(message){
     await loadOneMessage(message);
-    var submitButton = document.querySelector('#form button[type="submit"]');
+    var submitButton = document.getElementById('submit-chat-button');
     var messageInput = document.getElementById('message');
     fetch(sendMessageUrl, {
         method: 'POST',
@@ -32,7 +32,7 @@ async function sendMessage(message){
     document.getElementById('form').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        var submitButton = document.querySelector('#chat-form button[type="submit"]');
+        var submitButton = document.getElementById('submit-chat-button');
         var messageInput = document.getElementById('message');
 
         // Deshabilitar el botón y el campo de entrada
@@ -64,7 +64,7 @@ async function updateChatMessages(messages) {
                     });
                     messageDiv.appendChild(link);
                 })
-                var submitButton = document.querySelector('#chat-form button[type="submit"]');
+                var submitButton = document.getElementById('submit-chat-button');
                 var messageInput = document.getElementById('message');
                 submitButton.disabled = true;
                 messageInput.disabled = true;
@@ -128,6 +128,7 @@ async function loadOneMessage(message) {
         }else{
             updateChatMessages([msg]);
         }
+        loadingSpinnerChat.style.display = 'none';
         
     });
 }

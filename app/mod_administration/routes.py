@@ -39,5 +39,4 @@ def add_role_to_user():
     data = request.get_json()
     user_id = data.get('user_id')
     role_id = data.get('role_id')
-    print(role_id, user_id)
     return user_controller.add_role_to_user(user_id,role_id)

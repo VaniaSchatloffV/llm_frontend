@@ -20,7 +20,7 @@ def create_app():
 
     app = Flask(__name__)
     app.config['SECRET_KEY'] = settings.flask_secret_key
-    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 
     @app.before_request
     def before_request():
