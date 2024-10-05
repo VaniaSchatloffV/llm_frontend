@@ -403,3 +403,20 @@ main {
 .table button:hover {
     background-color: #f2f2f2;
 }
+
+.orange-button{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 30%;
+    text-align: left;
+    background-color: #f4d1a0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.orange-button:hover {
+    background-color: #f6be6f;
+    color: #000;
+}
