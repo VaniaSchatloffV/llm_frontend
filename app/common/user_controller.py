@@ -46,7 +46,6 @@ def register():
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     try:
         existing_user = get_user(email)
-        print(existing_user)
         if existing_user != {}:
             flash('El correo electrónico ya está registrado', 'danger')
             return redirect(url_for('auth.index'))
@@ -112,7 +111,7 @@ def insert_new_user(email: str, name: str, lastname: str, password: str):
 def get_all_users(offset = 0, limit = 10):
     with DB_ORM_Handler() as db:
         user_role_data = db.getObjects(
-        columns=[UserObject.id, UserObject.name, UserObject.lastname, RoleObject.role_name, UserObject.created_at], 
+        columns=[UserObject.id, UserObject.name, UserObject.lastname, UserObject.role_id, RoleObject.role_name, UserObject.created_at], 
         p_obj=UserObject, 
         defer_cols=[], 
         order_by=[UserObject.id],
@@ -147,7 +146,6 @@ def get_all_roles(offset: Optional[int] = None, limit: Optional[int] = None):
     """
     with DB_ORM_Handler() as db:
         role_data = db.query(get_roles_query, return_data=True)
-    print(role_data)
     return json.dumps(role_data)
 
 def get_all_permissions(offset = 0, limit = 10):
@@ -170,7 +168,6 @@ def add_role_to_user(user_id: int, role_id: int):
                 UserObject.id == user_id,
                 role_id=role_id
             )
-            print(updated_rows)
             flash("Rol cambiado con éxito", "success")
             return jsonify({"result":True})
     except Exception as e:
