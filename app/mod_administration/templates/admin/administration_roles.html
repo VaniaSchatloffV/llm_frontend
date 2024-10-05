@@ -1,0 +1,23 @@
+{% extends 'administration.html' %}
+
+{% block admin_content %}
+<div id="role_div">
+    <div class="container">
+        <div id="administration-role" class="administration">
+            <div>
+                <h4>Administrar roles de usuario</h4>
+                <h2>Roles</h2>
+            </div>
+            <ul id="list-roles" class="list">
+                
+                <!-- Acá se cargan los roles -->
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    const getRolesUrl = "{{ url_for('admin.get_roles') }}";
+</script>
+<script src="{{ url_for('static', filename='scripts/common_script.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/admin_role_script.js') }}"></script>
+{% endblock %}

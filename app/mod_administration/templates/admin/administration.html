@@ -11,13 +11,13 @@
     <button class="button large" onclick="close_sidebar()">Cerrar</button>
     <div class="admin" id="admin">
         <div class="conversation-container">
-            <a id="usuarios" class="button sidebar-link" onclick="adminUser()">Usuarios</a>
+            <a id="usuarios" href="{{ url_for('admin.main_administration') }}" class="button sidebar-link">Usuarios</a>
         </div>
         <div class="conversation-container">
-            <a id="roles" class="button sidebar-link" onclick="adminRole()">Roles</a>
+            <a id="roles" href="{{ url_for('admin.main_administration_role') }}" class="button sidebar-link">Roles</a>
         </div>
         <div class="conversation-container">
-            <a id="permissions" class="button sidebar-link" onclick="adminPermissions()">Permisos</a>
+            <a id="permissions" href="{{ url_for('admin.main_administration_permission') }}" class="button sidebar-link">Permisos</a>
         </div>
     </div>
 </div>
@@ -32,50 +32,9 @@
                 </div>
             </div>
         </div>
-        <div id="user_div" style="display: block;">
-            <div class="container">
-                <div class="administration">
-                    <h4>Administrar roles de usuario</h4>
-                    <h2>Usuarios</h2>
-                    <ul id="list" class="list">
-                        <!-- Acá se cargan los usuarios -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div id="role_div" style="display: none;">
-            <div class="container">
-                <div class="administration">
-                    <h4>Administrar roles de usuario</h4>
-                    <h2>Roles</h2>
-                    <ul id="list-roles" class="list">
-                        
-                        <!-- Acá se cargan los roles -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div id="permissions_div" style="display: none;">
-            <div class="container">
-                <div class="administration">
-                    <h4>Permisos de la plataforma</h4>
-                    <h2>Permisos</h2>
-                    <ul id="list-permissions" class="list">
-                        
-                        <!-- Acá se cargan los permisos -->
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
+    {% block admin_content  %}{% endblock %}
 </div>
-<script>
-    const getUsersUrl = "{{ url_for('admin.get_users') }}";
-    const getRolesUrl = "{{ url_for('admin.get_roles') }}";
-    const getPermissionsUrl = "{{ url_for('admin.get_permissions') }}";
-    const addRoleUrl = "{{ url_for('admin.add_role_to_user') }}";
-</script>
 <script src="{{ url_for('static', filename='scripts/common_script.js') }}"></script>
-<script src="{{ url_for('static', filename='scripts/admin_script.js') }}"></script>
 </body>
 {% endblock %}

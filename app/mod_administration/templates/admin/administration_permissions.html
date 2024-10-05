@@ -1,0 +1,21 @@
+{% extends 'administration.html' %}
+
+{% block admin_content %}
+<div id="permissions_div">
+    <div class="container">
+        <div class="administration">
+            <h4>Permisos de la plataforma</h4>
+            <h2>Permisos</h2>
+            <ul id="list-permissions" class="list">
+                
+                <!-- Acá se cargan los permisos -->
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    const getPermissionsUrl = "{{ url_for('admin.get_permissions') }}";
+</script>
+<script src="{{ url_for('static', filename='scripts/common_script.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/admin_permission_script.js') }}"></script>
+{% endblock %}

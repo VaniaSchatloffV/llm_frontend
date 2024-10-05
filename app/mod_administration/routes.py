@@ -3,13 +3,31 @@ from ..decorators.login_decorator import login_required
 from . import admin_bp
 from ..common import user_controller
 
-@admin_bp.get('/administration/')
+@admin_bp.get('/administration/users/')
 @login_required
 def main_administration():
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    administration_template = render_template('administration.html', name=name, lastname=lastname, user_type=role)
+    administration_template = render_template('administration_users.html', name=name, lastname=lastname, user_type=role)
+    return administration_template
+
+@admin_bp.get('/administration/roles/')
+@login_required
+def main_administration_role():
+    name = session.get('user_name')
+    lastname = session.get('user_lastname')
+    role = session.get('user_role')
+    administration_template = render_template('administration_roles.html', name=name, lastname=lastname, user_type=role)
+    return administration_template
+
+@admin_bp.get('/administration/permissions/')
+@login_required
+def main_administration_permission():
+    name = session.get('user_name')
+    lastname = session.get('user_lastname')
+    role = session.get('user_role')
+    administration_template = render_template('administration_permissions.html', name=name, lastname=lastname, user_type=role)
     return administration_template
 
 @admin_bp.get('/users/')
