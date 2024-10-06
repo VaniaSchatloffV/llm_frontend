@@ -29,11 +29,12 @@ def initialize_data():
 class RoleObject(Base):
     __tablename__ = 'roles'
     __attributes__ = [
-            'id', 'role_name'
+            'id', 'role_name', 'deleted'
         ]
     
     id                          = sal.Column('id', sal.BigInteger, primary_key=True, autoincrement=True)
     role_name                   = sal.Column('role_name', sal.String(length=256))
+    deleted                     = sal.Column('deleted', sal.Boolean, default=False)
 
     def __repr__(self):
         return(f"RoleObject (id={self.id}, role_name={self.role_name})")

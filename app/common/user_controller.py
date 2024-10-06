@@ -179,7 +179,6 @@ def create_role(role_name: str, permissions: str):
         with DB_ORM_Handler() as db:
             role = RoleObject()
             role.role_name = role_name
-            print(role)
             role_id = db.saveObject(role, get_obj_attr=True)
             permissions = permissions.split(",")
             for perm in permissions:

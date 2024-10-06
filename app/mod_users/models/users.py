@@ -14,7 +14,7 @@ def initialize_data():
 class UserObject(Base):
     __tablename__ = 'users'
     __attributes__ = [
-            'id', 'name', 'name', 'lastname', 'email', 'password', 'role_id', 'created_at'
+            'id', 'name', 'name', 'lastname', 'email', 'password', 'role_id', 'created_at', 'deleted'
         ]
     
     id                          = sal.Column('id', sal.BigInteger, primary_key=True, autoincrement=True)
@@ -24,6 +24,7 @@ class UserObject(Base):
     password                    = sal.Column('password', sal.String(length=512))
     role_id                     = sal.Column('role_id', sal.Integer, sal.ForeignKey(RoleObject.id))
     created_at                  = sal.Column('created_at', sal.DateTime(timezone=True), server_default=func.now())
+    deleted                     = sal.Column('deleted', sal.Boolean, default=False)
     
     def __repr__(self):
         return(f"UserObject (id={self.id}, name={self.name}, lastname={self.lastname}, created_at={self.created_at})")

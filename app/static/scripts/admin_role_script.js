@@ -17,9 +17,6 @@ function loadRoles() {
                 const item = createRoleItem(role);
                 roles_list.appendChild(item);
             });
-        })
-        .catch(error => {
-            console.error('Error loading roles:', error);
         });
 
     // Crear botón de "Crear rol"
@@ -94,7 +91,6 @@ function startModalCreateRole() {
 // Crear el formulario para la creación de roles
 function createRoleForm() {
     const form = createElement("form", "form-group", "");
-    form.method = "post";
 
     // Input para el nombre del rol
     const form_name_label = createElement("label", "", "Nombre del nuevo rol:");
@@ -137,7 +133,6 @@ function createRoleForm() {
 
 function createRoleFormUpdate(role_id, role_name, permissions) {
     const form = createElement("form", "form-group", "");
-    form.method = "post";
 
     const form_name_label = createElement("label", "", "Nombre del rol:");
     form_name_label.setAttribute('for', "new_role_name");
@@ -231,14 +226,11 @@ function updateRoleCall(role_id, role_name, permissions){
             'permissions': selectedPermissionsInput
         })
     })
-    .then(response => response.json()) // Procesar la respuesta como JSON
-    .then(data => {
+    .then(response => {
+        response.json()
+    }).then(data => {
             loadRoles();
             document.getElementById('modal').style.display = "none";
-    })
-    .catch(error => {
-        console.error('Error al crear el rol:', error);
-        alert('Hubo un error al crear el rol.');
     });
 }
 
@@ -322,9 +314,6 @@ function addPermissionToTableBody(tbody, permissions=[]) {
 
                 tbody.appendChild(item);
             });
-        })
-        .catch(error => {
-            console.error('Error loading permissions:', error);
         });
 }
 
@@ -392,12 +381,8 @@ function createRole() {
     .then(response => response.json()) // Procesar la respuesta como JSON
     .then(data => {
             loadRoles();
-    })
-    .catch(error => {
-        console.error('Error al crear el rol:', error);
-        alert('Hubo un error al crear el rol.');
+            document.getElementById('modal').style.display = "none";
     });
 }
 
-// Inicializar la carga de roles
 adminRole();
