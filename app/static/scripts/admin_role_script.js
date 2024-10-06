@@ -56,10 +56,13 @@ function createRoleItem(role) {
     // Si el rol no es un rol por defecto (ID 1 o 2), añadir acciones
     if (id !== 1 && id !== 2) {
         const actions = createElement('div', 'item-actions');
-        const button_1_span = createElement('span', 'role', 'A');
+        const button_update = createElement('span', 'role', '✏️');
+        button_update.addEventListener('click', function(){
+            updateRole(id, role_name, permissions);
+        });
         const button_2_span = createElement('span', 'icon-role', '⇅');
         
-        actions.appendChild(button_1_span);
+        actions.appendChild(button_update);
         actions.appendChild(button_2_span);
         item.appendChild(actions);
     }
@@ -79,6 +82,7 @@ function startModalCreateRole() {
     const modalCloseButton = createElement("span", "modal-button", "x");
     modalCloseButton.addEventListener('click', () => {
         modal.style.display = 'none';
+        permisosSeleccionados = []
     });
 
     const modalTitle = createElement("h2", "", "Crear rol");
@@ -100,7 +104,7 @@ function createRoleForm() {
     form.append(form_name_label, createElement("br"), form_item_input, createElement("br"), createElement("br"));
 
     // Input para buscar permisos
-    const search_input = createFormInput("permission_search", "Buscar permiso...");
+    const search_input = createFormInput("permission_search", "Buscar permiso...", false);
     search_input.placeholder = "Buscar permiso...";
     search_input.addEventListener('keyup', searchPermission);
     form.append(search_input, createElement("br"));
@@ -130,18 +134,146 @@ function createRoleForm() {
     return form;
 }
 
+
+function createRoleFormUpdate(role_id, role_name, permissions) {
+    const form = createElement("form", "form-group", "");
+    form.method = "post";
+
+    const form_name_label = createElement("label", "", "Nombre del rol:");
+    form_name_label.setAttribute('for', "new_role_name");
+    const form_item_input = createFormInput("new_role_name", "", false);
+    form_item_input.value = role_name;
+    
+    form.append(form_name_label, createElement("br"), form_item_input, createElement("br"), createElement("br"));
+
+    const search_input = createFormInput("permission_search", "Buscar permiso...", false);
+    search_input.placeholder = "Buscar permiso...";
+    search_input.addEventListener('keyup', searchPermission);
+    form.append(search_input, createElement("br"));
+
+    const selectedPermissions = createElement("input", "hidden");
+    selectedPermissions.id = "selected_permissions";
+    selectedPermissions.name = "permisos";
+    selectedPermissions.type = "hidden";
+    form.appendChild(selectedPermissions);
+
+    const ul = createElement("ul", "", "");
+    ul.id = "selectedPermissionsList";
+
+    const table = createTablePermissions(permissions);
+    form.append(ul, table);
+
+    var buttonSubmit = createElement("button", "orange-button", "Crear rol");
+    buttonSubmit.type = "submit";
+    buttonSubmit.addEventListener('click', function(){
+        updateRoleCall(role_id, role_name, permissions);
+    });
+    form.appendChild(buttonSubmit);
+
+    return form;
+}
+
+function getSelectedPermissionsArray(selectedPermissionsList) {
+    const permissionsArray = [];
+    const listItems = selectedPermissionsList.getElementsByTagName('li');
+    
+    for (let i = 0; i < listItems.length; i++) {
+        const permissionText = listItems[i].textContent || listItems[i].innerText;
+        permissionsArray.push(permissionText);
+    }
+
+    return permissionsArray;
+}
+
+function splitStringByCommaSpace(str) {
+    return str.split(', ').map(s => s.trim());
+}
+
+function compareArrays(arr1, arr2) {
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
+
+    const sortedArr1 = arr1.slice().sort();
+    const sortedArr2 = arr2.slice().sort();
+
+    for (let i = 0; i < sortedArr1.length; i++) {
+        if (sortedArr1[i] !== sortedArr2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+function updateRoleCall(role_id, role_name, permissions){
+    const roleNameInput = document.getElementById("new_role_name").value;
+    const selectedPermissionsInput = document.getElementById("selected_permissions").value;
+    const selectedPermissionsList = document.getElementById('selectedPermissionsList');
+    const selectedPermissionsListArray = getSelectedPermissionsArray(selectedPermissionsList);
+    const permisos = splitStringByCommaSpace(permissions); 
+    if (!selectedPermissionsInput) {
+        alert("Debe agregar permisos al rol.");
+        return;
+    }
+    if (roleNameInput == role_name && compareArrays(permisos, selectedPermissionsListArray)) {
+        alert("No ha hecho ningún cambio en el rol.");
+        return;
+    }
+    fetch(updateRoleUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'role_id': role_id,
+            'new_role_name': roleNameInput,
+            'permissions': selectedPermissionsInput
+        })
+    })
+    .then(response => response.json()) // Procesar la respuesta como JSON
+    .then(data => {
+            loadRoles();
+            document.getElementById('modal').style.display = "none";
+    })
+    .catch(error => {
+        console.error('Error al crear el rol:', error);
+        alert('Hubo un error al crear el rol.');
+    });
+}
+
+function updateRole(role_id, role_name, permissions) {
+    const modal = document.getElementById('modal');
+    const modalContainer = document.getElementById('container-small');
+
+    modal.style.display = 'block';
+    modalContainer.innerHTML = '';
+
+    const modalCloseButton = createElement("span", "modal-button", "x");
+    modalCloseButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+        permisosSeleccionados = [];
+    });
+
+    const modalTitle = createElement("h2", "", "Actualizar rol " + role_id + " - " + role_name);
+    const modalDescription = createElement("p", "", "En esta sección puede cambiar los atributos que desee del rol");
+    const form = createRoleFormUpdate(role_id, role_name, permissions);
+
+    modalContainer.append(modalCloseButton, modalTitle, modalDescription, createElement("br"), form);
+}
+
 // Crear un input de formulario
-function createFormInput(input_id, placeholder) {
+function createFormInput(input_id, placeholder, required = true) {
     const form_item_input = createElement("input", "modal-input");
     form_item_input.placeholder = placeholder;
     form_item_input.type = "text";
     form_item_input.id = input_id;
-    form_item_input.required = true;
+    form_item_input.required = required;
     return form_item_input;
 }
 
 // Crear la tabla de permisos
-function createTablePermissions() {
+function createTablePermissions(permissions=[]) {
     const tableDiv = createElement("div", "table-container", "");
     const table = createElement("table", "table");
     table.id = "permission-table";
@@ -155,7 +287,7 @@ function createTablePermissions() {
     thead.appendChild(tr);
 
     const tbody = createElement("tbody", "", "");
-    addPermissionToTableBody(tbody);
+    addPermissionToTableBody(tbody, permissions);
     table.append(thead, tbody);
 
     tableDiv.appendChild(table);
@@ -163,7 +295,7 @@ function createTablePermissions() {
 }
 
 // Añadir permisos a la tabla de permisos
-function addPermissionToTableBody(tbody) {
+function addPermissionToTableBody(tbody, permissions=[]) {
     fetch(getPermissionsUrl)
         .then(response => response.json())
         .then(data => {
@@ -177,6 +309,10 @@ function addPermissionToTableBody(tbody) {
 
                 // Botón para agregar o quitar permiso
                 const button = createElement("button", "", "Agregar");
+                if (permissions.includes(name)){
+                    togglePermiso(id, name);
+                    button.textContent = "Quitar";
+                }
                 button.addEventListener('click', (event) => {
                     event.preventDefault();
                     togglePermiso(id, name);

@@ -67,3 +67,13 @@ def create_role():
     permissions = data.get('permissions')
     return user_controller.create_role(role_name, permissions)
 
+
+@admin_bp.post('/updateRole/')
+@login_required
+def update_role():
+    data = request.get_json()
+    role_id = data.get('role_id')
+    role_name = data.get('new_role_name', None)
+    permissions = data.get('permissions', None)
+    return user_controller.update_role(role_id, permissions, role_name)
+

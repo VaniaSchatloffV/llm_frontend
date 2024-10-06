@@ -298,3 +298,29 @@ class DB_ORM_Handler(object):
             raise e
         finally:
             self.session.remove()
+    
+    def destroyObjects(self, p_obj, *args, **kwargs):
+        """
+        Elimina registros de la tabla basada en las condiciones especificadas.
+        
+        :param p_obj: El modelo de la tabla (ORM class).
+        :param args: Condiciones en formato de argumentos posicionales.
+        :param kwargs: Condiciones adicionales en formato de clave-valor.
+        """
+        sess = self.session()
+        try:
+            query = sess.query(p_obj).filter(*args)
+            
+            if kwargs:
+                query = query.filter_by(**kwargs)
+            
+            rows_deleted = query.delete(synchronize_session=False)
+            sess.commit()
+            return rows_deleted
+
+        except Exception as e:
+            print(f"Error al eliminar registros: {e}")
+            sess.rollback()
+            raise e
+        finally:
+            self.session.remove()

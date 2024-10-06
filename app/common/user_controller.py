@@ -192,3 +192,30 @@ def create_role(role_name: str, permissions: str):
     except Exception as e:
         flash("Ha ocurrido un error al crear rol", "error")
         return jsonify({"result":False})
+
+def update_role(role_id: int, permissions: Optional[str] = None, role_name: Optional[str] = None):
+    try:
+        with DB_ORM_Handler() as db:
+            if role_name:
+                db.updateObjects(
+                    RoleObject,
+                    RoleObject.id == role_id,
+                    role_name = role_name
+                )
+            if permissions:
+                db.destroyObjects(
+                    RolePermissionAssocObject,
+                    RolePermissionAssocObject.role_id == role_id
+                )
+                new_permissions = []
+                for i in permissions.split(","):
+                    new_perm = RolePermissionAssocObject()
+                    new_perm.role_id = role_id
+                    new_perm.permission_id = i
+                    new_permissions.append(new_perm)
+                db.saveObject(p_objs = new_permissions)
+            flash("Rol cambiado con éxito", "success")
+            return jsonify({"result":True})
+    except Exception as e:
+        flash("Ha ocurrido un error al actualizar rol", "error")
+        return jsonify({"result":False})
