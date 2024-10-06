@@ -6,6 +6,7 @@ from .. import get_settings
 from ..mod_users.models.users import UserObject
 from ..mod_users.models.roles import RoleObject
 from ..mod_users.models.permissions import PermissionObject
+from ..mod_users.models.role_permission_assoc import RolePermissionAssocObject
 import json
 
 settings = get_settings()
@@ -83,7 +84,6 @@ def get_user(user_email: str):
         if len(user) == 0:
             return {}
         return user.pop()
-
 
 def get_role(role_id: int):
     with DB_ORM_Handler() as db:
@@ -171,5 +171,24 @@ def add_role_to_user(user_id: int, role_id: int):
             flash("Rol cambiado con éxito", "success")
             return jsonify({"result":True})
     except Exception as e:
-        flash("Ha ocurrido un error al actualizar rol")
+        flash("Ha ocurrido un error al actualizar rol", "error")
+        return jsonify({"result":False})
+
+def create_role(role_name: str, permissions: str):
+    try:
+        with DB_ORM_Handler() as db:
+            role = RoleObject()
+            role.role_name = role_name
+            print(role)
+            role_id = db.saveObject(role, get_obj_attr=True)
+            permissions = permissions.split(",")
+            for perm in permissions:
+                role_perm_assoc = RolePermissionAssocObject()
+                role_perm_assoc.role_id = role_id
+                role_perm_assoc.permission_id = perm
+                db.saveObject(role_perm_assoc)
+            flash("Rol creado con éxito", "success")
+            return jsonify({"result":True})
+    except Exception as e:
+        flash("Ha ocurrido un error al crear rol", "error")
         return jsonify({"result":False})

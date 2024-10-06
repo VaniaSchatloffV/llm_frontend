@@ -120,6 +120,13 @@ function createRoleForm() {
     const table = createTablePermissions();
     form.append(ul, table);
 
+    var buttonSubmit = createElement("button", "orange-button", "Crear rol");
+    buttonSubmit.type = "submit";
+    buttonSubmit.addEventListener('click', function(){
+        createRole();
+    });
+    form.appendChild(buttonSubmit);
+
     return form;
 }
 
@@ -223,6 +230,37 @@ function searchPermission() {
             tr[i].style.display = (txtValue.toUpperCase().indexOf(filter) > -1) ? "" : "none";
         }
     }
+}
+
+function createRole() {
+    const roleNameInput = document.getElementById("new_role_name").value;
+    const selectedPermissionsInput = document.getElementById("selected_permissions").value;
+
+    // Validar que se haya ingresado un nombre de rol y al menos un permiso
+    if (!roleNameInput || !selectedPermissionsInput) {
+        alert("Por favor, ingresa un nombre para el rol y selecciona al menos un permiso.");
+        return;
+    }
+
+    // Hacer la solicitud POST al servidor
+    fetch(addRoleUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'new_role_name': roleNameInput,
+            'permissions': selectedPermissionsInput
+        })
+    })
+    .then(response => response.json()) // Procesar la respuesta como JSON
+    .then(data => {
+            loadRoles();
+    })
+    .catch(error => {
+        console.error('Error al crear el rol:', error);
+        alert('Hubo un error al crear el rol.');
+    });
 }
 
 // Inicializar la carga de roles

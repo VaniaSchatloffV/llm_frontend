@@ -58,3 +58,12 @@ def add_role_to_user():
     user_id = data.get('user_id')
     role_id = data.get('role_id')
     return user_controller.add_role_to_user(user_id,role_id)
+
+@admin_bp.post('/createRole/')
+@login_required
+def create_role():
+    data = request.get_json()
+    role_name = data.get('new_role_name')
+    permissions = data.get('permissions')
+    return user_controller.create_role(role_name, permissions)
+
