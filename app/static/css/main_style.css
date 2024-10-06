@@ -353,6 +353,12 @@ main {
     background-color: #ffffff;
 }
 
+.table-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+}
+
 .table {
     border-collapse: collapse;
     border-spacing: 0;

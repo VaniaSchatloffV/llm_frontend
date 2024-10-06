@@ -36,6 +36,7 @@ function searchRole() {
 
 
 function createTableRole(userId, userFullName, userActualRoleId) {
+    const tableDiv = createElement("div", "table-container", "");
     const table = createElement("table", "table");
     table.id = "tablaRoles";
     
@@ -78,8 +79,8 @@ function createTableRole(userId, userFullName, userActualRoleId) {
         .catch(error => {
             console.error('Error loading roles:', error);
         });
-    
-    return table; // Retorna la tabla completa
+    tableDiv.appendChild(table);
+    return tableDiv; // Retorna la tabla completa
 }
 
 function createUserRoleModal(userId, userFullName, role_id) {
