@@ -77,3 +77,11 @@ def update_role():
     permissions = data.get('permissions', None)
     return user_controller.update_role(role_id, permissions, role_name)
 
+@admin_bp.post('/deleteRole/')
+@login_required
+def delete_role():
+    data = request.get_json()
+    role_id = data.get('role_id')
+    return user_controller.delete_role(role_id)
+
+

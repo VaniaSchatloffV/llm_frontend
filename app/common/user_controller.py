@@ -138,6 +138,7 @@ def get_all_roles(offset: Optional[int] = None, limit: Optional[int] = None):
         from {settings.postgres_schema}.roles r
         left join {settings.postgres_schema}.role_permission_associations rpa on rpa.role_id = r.id
         left join {settings.postgres_schema}.permissions p on p.id = rpa.permission_id
+        WHERE r.deleted = FALSE
         GROUP BY r.id, r.role_name
         ORDER BY r.id ASC
         LIMIT {limit}
@@ -217,4 +218,19 @@ def update_role(role_id: int, permissions: Optional[str] = None, role_name: Opti
             return jsonify({"result":True})
     except Exception as e:
         flash("Ha ocurrido un error al actualizar rol", "error")
+        return jsonify({"result":False})
+
+def delete_role(role_id: int):
+    try:
+        with DB_ORM_Handler() as db:
+            db.updateObjects(
+                RoleObject,
+                RoleObject.id == role_id,
+                deleted = True
+            )
+            
+            flash("Rol eliminado con éxito", "success")
+            return jsonify({"result":True})
+    except Exception as e:
+        flash("Ha ocurrido un error al eliminar rol", "error")
         return jsonify({"result":False})

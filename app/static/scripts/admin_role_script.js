@@ -57,10 +57,26 @@ function createRoleItem(role) {
         button_update.addEventListener('click', function(){
             updateRole(id, role_name, permissions);
         });
-        const button_2_span = createElement('span', 'icon-role', '⇅');
-        
+        const button_delete = createElement('span', 'icon-role', '🗑');
+        button_delete.addEventListener('click', function(){
+            if (confirm("¿Desea eliminar el rol " + role_name + "?")){
+                fetch(deleteRoleUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'role_id': id
+                    })
+                }).then(response => response.json()) // Procesar la respuesta como JSON
+                .then(data => {
+                        loadRoles();
+                        document.getElementById('modal').style.display = "none";
+                });
+            }
+        });
         actions.appendChild(button_update);
-        actions.appendChild(button_2_span);
+        actions.appendChild(button_delete);
         item.appendChild(actions);
     }
 
