@@ -70,13 +70,17 @@ def change_conversation_name():
     return llm_api.change_conversation_name(conversation_id, name)
 
 @chatbot_bp.get('/chat/')
-@permissions_required(permissions_list=[1])
+@permissions_required(permissions_list=[1], main_view=True)
 @login_required
-def main_chat():
+def main_chat(*args, **kwargs):
+    admin = kwargs.get('admin', False)
+    chat = kwargs.get('chat', False)
+    conversations = kwargs.get('conversations', False)
+    metrics = kwargs.get('metrics', False)
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    chat_template = render_template('chat.html', name=name, lastname=lastname, user_type=role)
+    chat_template = render_template('chat.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics)
     return chat_template
 
 @chatbot_bp.route('/checkFile/', methods=['POST'])

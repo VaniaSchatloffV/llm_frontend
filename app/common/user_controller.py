@@ -25,7 +25,7 @@ def login():
             session['user_role'] = role
         session['conversation_id'] = 0
         flash('Ha iniciado sesión correctamente', 'success')
-        return redirect(url_for('chatbot.main_chat'))
+        return redirect(url_for('auth.home'))
     else:
         flash('Email o contraseña inválida', 'danger')
         return redirect(url_for('auth.index'))

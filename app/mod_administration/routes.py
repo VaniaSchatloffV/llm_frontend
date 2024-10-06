@@ -5,33 +5,45 @@ from . import admin_bp
 from ..common import user_controller
 
 @admin_bp.get('/administration/users/')
-@permissions_required(permissions_list=[3,6,7])
+@permissions_required(permissions_list=[3,6,7], main_view=True)
 @login_required
-def main_administration():
+def main_administration(*args, **kwargs):
+    admin = kwargs.get('admin', False)
+    chat = kwargs.get('chat', False)
+    conversations = kwargs.get('conversations', False)
+    metrics = kwargs.get('metrics', False)
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    administration_template = render_template('administration_users.html', name=name, lastname=lastname, user_type=role)
+    administration_template = render_template('administration_users.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics)
     return administration_template
 
 @admin_bp.get('/administration/roles/')
-@permissions_required(permissions_list=[2])
+@permissions_required(permissions_list=[2], main_view=True)
 @login_required
-def main_administration_role():
+def main_administration_role(*args, **kwargs):
+    admin = kwargs.get('admin', False)
+    chat = kwargs.get('chat', False)
+    conversations = kwargs.get('conversations', False)
+    metrics = kwargs.get('metrics', False)
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    administration_template = render_template('administration_roles.html', name=name, lastname=lastname, user_type=role)
+    administration_template = render_template('administration_roles.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics)
     return administration_template
 
 @admin_bp.get('/administration/permissions/')
-@permissions_required(permissions_list=[2])
+@permissions_required(permissions_list=[2], main_view=True)
 @login_required
-def main_administration_permission():
+def main_administration_permission(*args, **kwargs):
+    admin = kwargs.get('admin', False)
+    chat = kwargs.get('chat', False)
+    conversations = kwargs.get('conversations', False)
+    metrics = kwargs.get('metrics', False)
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    administration_template = render_template('administration_permissions.html', name=name, lastname=lastname, user_type=role)
+    administration_template = render_template('administration_permissions.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics)
     return administration_template
 
 @admin_bp.get('/users/')

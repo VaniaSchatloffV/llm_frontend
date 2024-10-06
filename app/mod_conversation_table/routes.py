@@ -7,13 +7,17 @@ from . import conv_bp
 
 
 @conv_bp.get('/conversations/')
-@permissions_required(permissions_list=[4])
+@permissions_required(permissions_list=[4], main_view=True)
 @login_required
-def main_conversations():
+def main_conversations(*args, **kwargs):
+    admin = kwargs.get('admin', False)
+    chat = kwargs.get('chat', False)
+    conversations = kwargs.get('conversations', False)
+    metrics = kwargs.get('metrics', False)
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    conversations_template = render_template('conversations.html', name=name, lastname=lastname, user_type=role)
+    conversations_template = render_template('conversations.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics)
     return conversations_template
 
 @conv_bp.route('/get_conversation_table/', methods=['POST'])

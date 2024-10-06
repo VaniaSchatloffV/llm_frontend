@@ -1,17 +1,17 @@
 from functools import wraps
+from typing import Optional
 from flask import redirect, url_for, flash, session
-from ..common.DB import DB_ORM_Handler
-from ..mod_users.models.role_permission_assoc import RolePermissionAssocObject
-
 
 def contains_sublist(big_list, sublist):
-    sublist_length = len(sublist)
-    for i in range(len(big_list) - sublist_length + 1):
-        if big_list[i:i + sublist_length] == sublist:
-            return True
-    return False
+    for i in sublist:
+        if i not in big_list:
+            return False
+    return True
 
-def permissions_required(permissions_list = []):
+
+def permissions_required(permissions_list=[], main_view : Optional[bool] = False):
+    from ..common.DB import DB_ORM_Handler
+    from ..mod_users.models.role_permission_assoc import RolePermissionAssocObject
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -24,9 +24,17 @@ def permissions_required(permissions_list = []):
                         columns=[RolePermissionAssocObject.permission_id]
                     )
                     permissions = [perm.get("permission_id") for perm in permissions]
+                if main_view:
+                    admin = 2 in permissions or 3 in permissions or 6 in permissions or 7 in permissions
+                    chat = 1 in permissions
+                    conversations = 4 in permissions
+                    metrics = 5 in permissions
+                    kwargs['admin'] = admin
+                    kwargs['chat'] = chat
+                    kwargs['conversations'] = conversations
+                    kwargs['metrics'] = metrics
                 if contains_sublist(permissions, permissions_list):
                     return func(*args, **kwargs)
-            
             flash('No tienes permisos para acceder a esta página.', 'error')
             return redirect(url_for('auth.home'))
         return wrapper
