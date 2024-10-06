@@ -3,10 +3,12 @@ from . import chatbot_bp
 from flask import session, jsonify, request, send_file, abort, render_template
 from ..common import llm_api
 from ..decorators.login_decorator import login_required
+from ..decorators.access_decorator import permissions_required
 
 messages = []
 
 @chatbot_bp.route('/', methods=['POST'])
+@permissions_required(permissions_list=[1])
 @login_required
 def send_message():
     data = request.get_json()
@@ -17,16 +19,19 @@ def send_message():
     return jsonify({'success': True, 'messages': llm_api.get_conversation(conversation_id=session['conversation_id'])})
 
 @chatbot_bp.route('/get_messages/', methods=['GET'])
+@permissions_required(permissions_list=[1])
 @login_required
 def get_messages():
     return jsonify(llm_api.get_conversation(conversation_id=session['conversation_id']))
 
 @chatbot_bp.route('/get_conversations/', methods=['GET'])
+@permissions_required(permissions_list=[1])
 @login_required
 def get_conversations():
     return jsonify(llm_api.get_user_conversations(user_id=session['user_id']))
 
 @chatbot_bp.route('/set_conversation/', methods=['POST'])
+@permissions_required(permissions_list=[1])
 @login_required
 def set_conversation():
     data = request.get_json()
@@ -34,6 +39,7 @@ def set_conversation():
     return llm_api.set_conversation(conversation_id)
 
 @chatbot_bp.route('/downloadFile/', methods=['POST'])
+@permissions_required(permissions_list=[1])
 @login_required
 def download_file():
     data = request.get_json()
@@ -55,6 +61,7 @@ def download_file():
 
 
 @chatbot_bp.route('/change_conversation_name/', methods=['POST'])
+@permissions_required(permissions_list=[1])
 @login_required
 def change_conversation_name():
     data = request.get_json()
@@ -63,6 +70,7 @@ def change_conversation_name():
     return llm_api.change_conversation_name(conversation_id, name)
 
 @chatbot_bp.get('/chat/')
+@permissions_required(permissions_list=[1])
 @login_required
 def main_chat():
     name = session.get('user_name')
@@ -72,6 +80,7 @@ def main_chat():
     return chat_template
 
 @chatbot_bp.route('/checkFile/', methods=['POST'])
+@permissions_required(permissions_list=[1])
 @login_required
 def check_file():
     data = request.get_json()

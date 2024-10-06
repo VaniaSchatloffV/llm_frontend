@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, session
 from ..decorators.login_decorator import login_required
+from ..decorators.access_decorator import permissions_required
 from . import metric_bp
 
 @metric_bp.get('/metrics/')
+@permissions_required(permissions_list=[5])
 @login_required
 def main_metrics():
     name = session.get('user_name')

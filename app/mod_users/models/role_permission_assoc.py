@@ -57,7 +57,7 @@ class RolePermissionAssocObject(Base):
     role_id                     = sal.Column('role_id', sal.Integer, sal.ForeignKey(RoleObject.id),  primary_key=True)
     
     def __repr__(self):
-        return(f"RolePermissionAssocObject (id={self.id}, role_id={self.role_id}, permission_id={self.permission_id}, created_at={self.created_at})")
+        return(f"RolePermissionAssocObject (role_id={self.role_id}, permission_id={self.permission_id})")
     
     def set_dictionary(self, data: dict):
         for attr in self.__attributes__:

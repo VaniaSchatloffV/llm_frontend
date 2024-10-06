@@ -2,10 +2,12 @@ import os
 from flask import Blueprint, render_template, session, jsonify, request, send_file, abort, flash
 from ..common import llm_api
 from ..decorators.login_decorator import login_required
+from ..decorators.access_decorator import permissions_required
 from . import conv_bp
 
 
 @conv_bp.get('/conversations/')
+@permissions_required(permissions_list=[4])
 @login_required
 def main_conversations():
     name = session.get('user_name')
@@ -15,6 +17,7 @@ def main_conversations():
     return conversations_template
 
 @conv_bp.route('/get_conversation_table/', methods=['POST'])
+@permissions_required(permissions_list=[4])
 @login_required
 def get_conversation_table():
     data = request.get_json()

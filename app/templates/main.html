@@ -15,7 +15,8 @@
                 <span>¡Hola, {{name}} {{lastname}}!   {{user_type}}</span>
             </div>
             <nav>
-                <a href="{{ url_for('chatbot.main_chat') }}">Inicio</a>
+                <a href="{{ url_for('auth.home') }}">Inicio</a>
+                <a href="{{ url_for('chatbot.main_chat') }}">Chat</a>
                 <a href="{{ url_for('conv.main_conversations') }}">Conversaciones</a>
                 <a href="{{ url_for('metric.main_metrics') }}">Métricas</a>
                 <a href="{{ url_for('admin.main_administration') }}">Administración</a>

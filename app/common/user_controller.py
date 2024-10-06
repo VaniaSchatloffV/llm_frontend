@@ -20,6 +20,7 @@ def login():
         session['user_id'] = user.get("id")
         session['user_name'] = user.get("name")
         session['user_lastname'] = user.get("lastname")
+        session['role_id'] = user.get("role_id")
         if role:
             session['user_role'] = role
         session['conversation_id'] = 0
