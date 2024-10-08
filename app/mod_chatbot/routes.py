@@ -8,8 +8,8 @@ from ..decorators.access_decorator import permissions_required
 messages = []
 
 @chatbot_bp.route('/', methods=['POST'])
-@permissions_required(permissions_list=[1])
 @login_required
+@permissions_required(permissions_list=[1])
 def send_message():
     data = request.get_json()
     message = data.get('message')
@@ -19,28 +19,28 @@ def send_message():
     return jsonify({'success': True, 'messages': llm_api.get_conversation(conversation_id=session['conversation_id'])})
 
 @chatbot_bp.route('/get_messages/', methods=['GET'])
-@permissions_required(permissions_list=[1])
 @login_required
+@permissions_required(permissions_list=[1])
 def get_messages():
     return jsonify(llm_api.get_conversation(conversation_id=session['conversation_id']))
 
 @chatbot_bp.route('/get_conversations/', methods=['GET'])
-@permissions_required(permissions_list=[1])
 @login_required
+@permissions_required(permissions_list=[1])
 def get_conversations():
     return jsonify(llm_api.get_user_conversations(user_id=session['user_id']))
 
 @chatbot_bp.route('/set_conversation/', methods=['POST'])
-@permissions_required(permissions_list=[1])
 @login_required
+@permissions_required(permissions_list=[1])
 def set_conversation():
     data = request.get_json()
     conversation_id = data.get('conversation_id')
     return llm_api.set_conversation(conversation_id)
 
 @chatbot_bp.route('/downloadFile/', methods=['POST'])
-@permissions_required(permissions_list=[1])
 @login_required
+@permissions_required(permissions_list=[1])
 def download_file():
     data = request.get_json()
     file_id = data.get('file_id')
@@ -61,8 +61,8 @@ def download_file():
 
 
 @chatbot_bp.route('/change_conversation_name/', methods=['POST'])
-@permissions_required(permissions_list=[1])
 @login_required
+@permissions_required(permissions_list=[1])
 def change_conversation_name():
     data = request.get_json()
     conversation_id = data.get('conversation_id')
@@ -70,8 +70,8 @@ def change_conversation_name():
     return llm_api.change_conversation_name(conversation_id, name)
 
 @chatbot_bp.get('/chat/')
-@permissions_required(permissions_list=[1], main_view=True)
 @login_required
+@permissions_required(permissions_list=[1], main_view=True)
 def main_chat(*args, **kwargs):
     admin = kwargs.get('admin', False)
     chat = kwargs.get('chat', False)
@@ -84,8 +84,8 @@ def main_chat(*args, **kwargs):
     return chat_template
 
 @chatbot_bp.route('/checkFile/', methods=['POST'])
-@permissions_required(permissions_list=[1])
 @login_required
+@permissions_required(permissions_list=[1])
 def check_file():
     data = request.get_json()
     file_id = data.get('file_id')

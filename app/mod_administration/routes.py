@@ -5,8 +5,8 @@ from . import admin_bp
 from ..common import user_controller
 
 @admin_bp.get('/administration/users/')
-@permissions_required(permissions_list=[3,6,7], main_view=True)
 @login_required
+@permissions_required(permissions_list=[3,6,7], main_view=True)
 def main_administration(*args, **kwargs):
     admin = kwargs.get('admin', False)
     chat = kwargs.get('chat', False)
@@ -19,8 +19,8 @@ def main_administration(*args, **kwargs):
     return administration_template
 
 @admin_bp.get('/administration/roles/')
-@permissions_required(permissions_list=[2], main_view=True)
 @login_required
+@permissions_required(permissions_list=[2], main_view=True)
 def main_administration_role(*args, **kwargs):
     admin = kwargs.get('admin', False)
     chat = kwargs.get('chat', False)
@@ -33,8 +33,8 @@ def main_administration_role(*args, **kwargs):
     return administration_template
 
 @admin_bp.get('/administration/permissions/')
-@permissions_required(permissions_list=[2], main_view=True)
 @login_required
+@permissions_required(permissions_list=[2], main_view=True)
 def main_administration_permission(*args, **kwargs):
     admin = kwargs.get('admin', False)
     chat = kwargs.get('chat', False)
@@ -47,32 +47,32 @@ def main_administration_permission(*args, **kwargs):
     return administration_template
 
 @admin_bp.get('/users/')
-@permissions_required(permissions_list=[3,6,7])
 @login_required
+@permissions_required(permissions_list=[3,6,7])
 def get_users():
     offset = request.args.get('offset')
     limit = request.args.get('limit')
     return user_controller.get_all_users(offset,limit)
 
 @admin_bp.get('/roles/')
-@permissions_required(permissions_list=[2])
 @login_required
+@permissions_required(permissions_list=[2])
 def get_roles():
     offset = request.args.get('offset')
     limit = request.args.get('limit')
     return user_controller.get_all_roles(offset,limit)
 
 @admin_bp.get('/permissions/')
-@permissions_required(permissions_list=[2])
 @login_required
+@permissions_required(permissions_list=[2])
 def get_permissions():
     offset = request.args.get('offset')
     limit = request.args.get('limit')
     return user_controller.get_all_permissions(offset,limit)
 
 @admin_bp.post('/addRole/')
-@permissions_required(permissions_list=[3,6,7])
 @login_required
+@permissions_required(permissions_list=[3,6,7])
 def add_role_to_user():
     data = request.get_json()
     user_id = data.get('user_id')
@@ -80,8 +80,8 @@ def add_role_to_user():
     return user_controller.add_role_to_user(user_id,role_id)
 
 @admin_bp.post('/createRole/')
-@permissions_required(permissions_list=[2])
 @login_required
+@permissions_required(permissions_list=[2])
 def create_role():
     data = request.get_json()
     role_name = data.get('new_role_name')
@@ -90,8 +90,8 @@ def create_role():
 
 
 @admin_bp.post('/updateRole/')
-@permissions_required(permissions_list=[2])
 @login_required
+@permissions_required(permissions_list=[2])
 def update_role():
     data = request.get_json()
     role_id = data.get('role_id')
@@ -100,8 +100,8 @@ def update_role():
     return user_controller.update_role(role_id, permissions, role_name)
 
 @admin_bp.post('/deleteRole/')
-@permissions_required(permissions_list=[2])
 @login_required
+@permissions_required(permissions_list=[2])
 def delete_role():
     data = request.get_json()
     role_id = data.get('role_id')

@@ -4,8 +4,8 @@ from ..decorators.access_decorator import permissions_required
 from . import metric_bp
 
 @metric_bp.get('/metrics/')
-@permissions_required(permissions_list=[5], main_view=True)
 @login_required
+@permissions_required(permissions_list=[5], main_view=True)
 def main_metrics(*args, **kwargs):
     admin = kwargs.get('admin', False)
     chat = kwargs.get('chat', False)

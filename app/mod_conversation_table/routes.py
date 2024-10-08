@@ -7,8 +7,8 @@ from . import conv_bp
 
 
 @conv_bp.get('/conversations/')
-@permissions_required(permissions_list=[4], main_view=True)
 @login_required
+@permissions_required(permissions_list=[4], main_view=True)
 def main_conversations(*args, **kwargs):
     admin = kwargs.get('admin', False)
     chat = kwargs.get('chat', False)
@@ -21,8 +21,8 @@ def main_conversations(*args, **kwargs):
     return conversations_template
 
 @conv_bp.route('/get_conversation_table/', methods=['POST'])
-@permissions_required(permissions_list=[4])
 @login_required
+@permissions_required(permissions_list=[4])
 def get_conversation_table():
     data = request.get_json()
     limit = data.get("limit")
