@@ -16,6 +16,16 @@ def permissions_required(permissions_list=[], main_view : Optional[bool] = False
         @wraps(func)
         def wrapper(*args, **kwargs):
             role_id = session.get('role_id', None)
+            if role_id == 2: # No asignado
+                kwargs['admin'] = False
+                kwargs['chat'] = False
+                kwargs['conversations'] = False
+                kwargs['metrics'] = False
+                if len(permissions_list) == 0:
+                    return func(*args, **kwargs)
+                else:
+                    flash('No tienes permisos para acceder a esta página.', 'error')
+                    return redirect(url_for('auth.home'))
             if role_id:
                 with DB_ORM_Handler() as db:
                     permissions = db.getObjects(

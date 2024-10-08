@@ -7,9 +7,25 @@
 </head>
 
 <body>
-    <div>
-        <h2>Inicio</h2>
+    <div class="container">
+        <div class="welcome-column">
+            <h2>Bienvenido(a) {{ name }} {{lastname}}!</h2>
+            <p>Tu rol es: {{ user_type }}.</p>
+        </div>
+
+        <div class="column">
+            <h3>Te encuentras en la página de inicio de NexQuery.</h3>
+            {% if role_id == 2 %}
+                <h3>¿Por qué estas aquí?</h3>
+                <h4>Debes esperar a que un administrador te de permisos de acceso.</h4>
+                De momento tu rol no ha sido asignado, por lo que aún no podrás disfrutar de las funciones que ofrece NexQuery.
+            {% endif %}
+            <h4>¿Qué es NexQuery?</h4>
+            NexQuery es una plataforma que ofrece una solución para la gestión y análisis de datos. Está diseñada para facilitar la interacción entre humanos y bases de datos.<br>
+            Permite realizar consultas sobre bases de datos sin necesidad de conocimientos técnicos.<br>
+        </div>
     </div>
+
 <script src="{{ url_for('static', filename='scripts/common_script.js') }}"></script>
 </body>
 {% endblock %}

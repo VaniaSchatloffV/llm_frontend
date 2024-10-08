@@ -26,8 +26,8 @@ def logout():
     return user_controller.logout()
 
 @auth_bp.get('/inicio/')
-@permissions_required(main_view=True)
 @login_required
+@permissions_required(main_view=True)
 def home(*args, **kwargs):
     admin = kwargs.get('admin', False)
     chat = kwargs.get('chat', False)
@@ -36,5 +36,5 @@ def home(*args, **kwargs):
     name = session.get('user_name')
     lastname = session.get('user_lastname')
     role = session.get('user_role')
-    return render_template('home.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics)
+    return render_template('home.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics, role_id=session.get("role_id"))
 
