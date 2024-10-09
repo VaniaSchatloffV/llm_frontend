@@ -197,7 +197,7 @@ function updateConversations(conversations) {
         });
         var button_calificar = document.createElement('a');
         button_calificar.className = 'button sidebar-link';
-        button_calificar.textContent = '✮';
+        button_calificar.textContent = conversation.qualified? '★':'☆';
         button_calificar.title = "Calificar conversación";
         button_calificar.style.textAlign = "center";
         button_calificar.style.width = '50px'
