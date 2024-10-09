@@ -18,6 +18,71 @@
     </div>
 
     <div id="main">
+        <div id="modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="container-small" id="container-small">
+                    <span id="x" class="modal-button">x</span>
+                    <div class="welcome-column">
+                        <h2>Calificar conversación</h2>
+                    </div>
+                    <div class="star-wrap">
+                        <input class="star" checked type="radio" value="-1" id="skip-star" name="star-radio" autocomplete="off" />
+                        <label class="star-label hidden"></label>
+                        <input class="star" type="radio" id="st-1" value="1" name="star-radio-" autocomplete="off"/>
+                        <label class="star-label" for="st-1">
+                            <div class="star-shape"></div>
+                        </label>
+                        <input class="star" type="radio" id="st-2" value="2" name="star-radio" autocomplete="off" />
+                        <label class="star-label" for="st-2">
+                            <div class="star-shape"></div>
+                        </label>
+                        <input class="star" type="radio" id="st-3" value="3" name="star-radio" autocomplete="off" />
+                        <label class="star-label" for="st-3">
+                            <div class="star-shape"></div>
+                        </label>
+                        <input class="star" type="radio" id="st-4" value="4" name="star-radio" autocomplete="off" />
+                        <label class="star-label" for="st-4">
+                            <div class="star-shape"></div>
+                        </label>
+                        <input class="star" type="radio" id="st-5" value="5" name="star-radio" autocomplete="off" />
+                        <label class="star-label" for="st-5">
+                            <div class="star-shape"></div>
+                        </label>
+                    </div>
+
+                    <br>
+                    <label for="1">1. ¿El chatbot respondió adecuadamente a tus preguntas?</label><br>
+                    <input id="1" class="modal-input" type="text" required>
+                    
+                    
+                    <br>
+                    <label for="2">2. ¿Cómo calificarías la velocidad de las respuestas del chatbot?</label><br>
+                    <input id="2" class="modal-input" type="text" required>
+                
+                
+                    <br>
+                    <label for="3">3. ¿Consideras que el chatbot debería ser más conciso en sus respuestas?</label><br>
+                    <input id="3" class="modal-input" type="text" required>
+                
+                
+                    <br>
+                    <label for="4">4. ¿Hubo algún tema con el que el chatbot tuvo dificultades para proporcionar información? Si es así, ¿cuál fue?</label><br>
+                    <input id="4" class="modal-input" type="text" required>
+                
+                
+                    <br>
+                    <label for="5">5. ¿Qué funcionalidad adicional te gustaría agregar para mejorar las conversaciones con el chatbot?</label><br>
+                    <input id="5" class="modal-input" type="text" required>
+
+                    <br>
+                    <label for="6">6. Comentarios adicionales.</label><br>
+                    <input id="6" class="modal-input" type="text" required><br>
+
+                    <button id="metric-send" class="orange-button" type="submit">Enviar</button>
+                    
+                </div>
+            </div>
+        </div>
 
         <div class="teal">
             <button id="openNav" class="button xlarge" onclick="open_sidebar()">&#9776;</button>

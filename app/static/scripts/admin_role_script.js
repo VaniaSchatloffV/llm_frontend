@@ -99,34 +99,33 @@ function startModalCreateRole() {
     });
 
     const modalTitle = createElement("h2", "", "Crear rol");
-    const form = createRoleForm();
+    modalContainer.append(modalCloseButton, modalTitle);
+    createRoleForm(modalContainer);
 
-    modalContainer.append(modalCloseButton, modalTitle, createElement("br"), form);
 }
 
 // Crear el formulario para la creación de roles
-function createRoleForm() {
-    const form = createElement("form", "form-group", "");
+function createRoleForm(modalContainer) {
 
     // Input para el nombre del rol
     const form_name_label = createElement("label", "", "Nombre del nuevo rol:");
     form_name_label.setAttribute('for', "new_role_name");
     const form_item_input = createFormInput("new_role_name", "");
     
-    form.append(form_name_label, createElement("br"), form_item_input, createElement("br"), createElement("br"));
+    modalContainer.append(form_name_label, form_item_input, createElement("br"));
 
     // Input para buscar permisos
     const search_input = createFormInput("permission_search", "Buscar permiso...", false);
     search_input.placeholder = "Buscar permiso...";
     search_input.addEventListener('keyup', searchPermission);
-    form.append(search_input, createElement("br"));
+    modalContainer.append(search_input);
 
     // Campo oculto para permisos seleccionados
     const selectedPermissions = createElement("input", "hidden");
     selectedPermissions.id = "selected_permissions";
     selectedPermissions.name = "permisos";
     selectedPermissions.type = "hidden";
-    form.appendChild(selectedPermissions);
+    modalContainer.appendChild(selectedPermissions);
 
     // Lista de permisos seleccionados
     const ul = createElement("ul", "", "");
@@ -134,54 +133,49 @@ function createRoleForm() {
 
     // Tabla de permisos
     const table = createTablePermissions();
-    form.append(ul, table);
+    modalContainer.append(ul, table);
 
     var buttonSubmit = createElement("button", "orange-button", "Crear rol");
     buttonSubmit.type = "submit";
     buttonSubmit.addEventListener('click', function(){
         createRole();
     });
-    form.appendChild(buttonSubmit);
-
-    return form;
+    modalContainer.appendChild(buttonSubmit);
 }
 
 
-function createRoleFormUpdate(role_id, role_name, permissions) {
-    const form = createElement("form", "form-group", "");
+function createRoleFormUpdate(modalContainer, role_id, role_name, permissions) {
 
     const form_name_label = createElement("label", "", "Nombre del rol:");
     form_name_label.setAttribute('for', "new_role_name");
     const form_item_input = createFormInput("new_role_name", "", false);
     form_item_input.value = role_name;
     
-    form.append(form_name_label, createElement("br"), form_item_input, createElement("br"), createElement("br"));
+    modalContainer.append(form_name_label, form_item_input, createElement("br"));
 
     const search_input = createFormInput("permission_search", "Buscar permiso...", false);
     search_input.placeholder = "Buscar permiso...";
     search_input.addEventListener('keyup', searchPermission);
-    form.append(search_input, createElement("br"));
+    modalContainer.append(search_input);
 
     const selectedPermissions = createElement("input", "hidden");
     selectedPermissions.id = "selected_permissions";
     selectedPermissions.name = "permisos";
     selectedPermissions.type = "hidden";
-    form.appendChild(selectedPermissions);
+    modalContainer.appendChild(selectedPermissions);
 
     const ul = createElement("ul", "", "");
     ul.id = "selectedPermissionsList";
 
     const table = createTablePermissions(permissions);
-    form.append(ul, table);
+    modalContainer.append(ul, table);
 
-    var buttonSubmit = createElement("button", "orange-button", "Crear rol");
+    var buttonSubmit = createElement("button", "orange-button", "Actualizar rol");
     buttonSubmit.type = "submit";
     buttonSubmit.addEventListener('click', function(){
         updateRoleCall(role_id, role_name, permissions);
     });
-    form.appendChild(buttonSubmit);
-
-    return form;
+    modalContainer.appendChild(buttonSubmit);
 }
 
 function getSelectedPermissionsArray(selectedPermissionsList) {
@@ -265,9 +259,8 @@ function updateRole(role_id, role_name, permissions) {
 
     const modalTitle = createElement("h2", "", "Actualizar rol " + role_id + " - " + role_name);
     const modalDescription = createElement("p", "", "En esta sección puede cambiar los atributos que desee del rol");
-    const form = createRoleFormUpdate(role_id, role_name, permissions);
-
-    modalContainer.append(modalCloseButton, modalTitle, modalDescription, createElement("br"), form);
+    modalContainer.append(modalCloseButton, modalTitle, modalDescription);
+    createRoleFormUpdate(modalContainer, role_id, role_name, permissions);
 }
 
 // Crear un input de formulario

@@ -188,23 +188,31 @@ function updateConversations(conversations) {
         var button = document.createElement('a');
         button.className = 'button sidebar-link';
         button.textContent = '🖉';
+        button.title = "Cambiar nombre a conversacion";
         button.style.textAlign = "center";
         button.style.width = '50px'
         button.addEventListener('click', function(event) {
             event.stopPropagation();
             changeConversationName(conversation.id, button, link);
         });
-        var button_elim = document.createElement('a');
-        button_elim.className = 'button sidebar-link';
-        button_elim.textContent = '🗑';
-        button_elim.style.textAlign = "center";
-        button_elim.style.width = '50px'
-        button_elim.addEventListener('click', function(event) {
-            event.stopPropagation();
-            console.log("Eliminar conversacion");
+        var button_calificar = document.createElement('a');
+        button_calificar.className = 'button sidebar-link';
+        button_calificar.textContent = '✮';
+        button_calificar.title = "Calificar conversación";
+        button_calificar.style.textAlign = "center";
+        button_calificar.style.width = '50px'
+        button_calificar.addEventListener('click', function(event) {
+            if (conversation.qualified) {
+                if (confirm("Ya ha calificado esta conversación. ¿Desea calificarla nuevamente?")){
+                    startModalCreateRole(conversation.id);
+                }
+            } else {
+                event.stopPropagation();
+                startModalCreateRole(conversation.id);
+            }
         });
         container.appendChild(button);
-        container.appendChild(button_elim);
+        container.appendChild(button_calificar);
         conversationsBar.appendChild(container);
     });
     loadingSpinnerSidebar.style.display = 'none';
@@ -280,3 +288,51 @@ function downloadFile(file_id, file_type){
 // Cargar mensajes al cargar la página
 loadMessages();
 loadConversations();
+
+
+function startModalCreateRole(conversation_id) {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'block';
+    const button = document.getElementById('metric-send');
+    let selectedStar = null;
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function() {
+        selectedStar = this.value;
+    });
+});
+    button.addEventListener('click', function() {
+        console.log(selectedStar);
+        var respuesta1 = document.getElementById("1").value;
+        var respuesta2 = document.getElementById("2").value;
+        var respuesta3 = document.getElementById("3").value;
+        var respuesta4 = document.getElementById("4").value;
+        var respuesta5 = document.getElementById("5").value;
+        var respuesta6 = document.getElementById("6").value;
+        if (!selectedStar) {
+            alert("Por favor, califique la conversación.");
+        }
+        else if (!respuesta1 && !respuesta2 && !respuesta3 && !respuesta4 && !respuesta5) {
+            alert("Por favor rellene algún campo.");
+        }
+        else {
+            console.log("Enviando respuesta...");
+            console.log("Calificación = " + selectedStar + "/5");
+            console.log(respuesta1);
+            console.log(respuesta2);
+            console.log(respuesta3);
+            console.log(respuesta4);
+            console.log(respuesta5);
+            console.log(respuesta6);
+            modal.style.display = 'none';
+        }
+    });
+    const modalCloseButton = document.getElementById("x");
+    modalCloseButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+        document.querySelectorAll('.modal-input').forEach(input => {
+            input.value = "";
+        });
+    });
+
+}
+

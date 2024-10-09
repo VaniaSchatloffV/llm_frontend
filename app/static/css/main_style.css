@@ -354,12 +354,57 @@ main {
     color: #ec971f;
 }
 
-.modal-input[type="text"] {
+.modal-input[type="text"]{
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-right: 10px;
     background-color: #ffffff;
+}
+
+.star-wrap {
+    width: max-content;
+    margin: 0 auto;
+    position: relative;
+}
+.star-label.hidden {
+    display: none;
+}
+.star-label {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+}
+
+.star-shape {
+    background-color: gold;
+    width: 80%;
+    height: 80%;
+    clip-path: polygon(
+      50% 0%,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%
+    );
+}
+  
+.star:checked + .star-label ~ .star-label .star-shape {
+    background-color: lightgray;
+}
+  
+.star {
+    position: fixed;
+    opacity: 0;
+    /*top: -90000px;*/
+    left: -90000px;
 }
 
 .table-container {
