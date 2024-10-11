@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     postgres_schema : str
     api_url : str
     temp_files : str
+    auth0_domain : str
+    api_identifier : str
+    auth0_client_id : str
+    auth0_client_secret : str
     
     class Config:
         env_file = ".env"
