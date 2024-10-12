@@ -48,9 +48,9 @@ function updatePaginator(total, offset, limit, sort_by, sort_way) {
     var totalPages = Math.ceil(total / limit);
     var maxVisiblePages = 5; // Número máximo de páginas visibles en el rango central
 
-    // Botón "Previous"
+    // Botón "Anterior"
     var beforeButton = document.createElement('button');
-    beforeButton.innerHTML = "&larr; Previous";
+    beforeButton.innerHTML = "&larr; Anterior";
     beforeButton.disabled = currentPage === 1;
     if (currentPage > 1) {
         beforeButton.addEventListener('click', function(event) {
@@ -108,7 +108,7 @@ function updatePaginator(total, offset, limit, sort_by, sort_way) {
     }
 
     var afterButton = document.createElement('button');
-    afterButton.innerHTML = "Next &rarr;";
+    afterButton.innerHTML = "Siguiente &rarr;";
     afterButton.disabled = currentPage === totalPages;
     if (currentPage < totalPages) {
         afterButton.addEventListener('click', function(event) {

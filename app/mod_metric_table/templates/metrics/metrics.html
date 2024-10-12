@@ -3,8 +3,58 @@
 {% block content %}
 <head>
     <title>Tabla de Métricas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/conversation_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_style.css') }}">
 </head>
 <body>
-    <h1>Metricas</h1>
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="container-small" id="container-small">
+                <!-- Acá se carga el contenido del modal -->
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <label for="sort">Ordenar por</label>
+        <select id="sort">
+            <option value="metric_id">Id métrica</option>
+            <option value="user_id">Id usuario</option>
+            <option value="conversation_id">Id conversación</option>
+        </select>
+        <select id="sort_way">
+            <option value="desc">Descendente</option>
+            <option value="asc">Ascendente</option>
+        </select>
+        <label for="limit">Datos por página</label>
+        <select id="limit">
+            <option value=5>5</option>
+            <option value=10 selected>10</option>
+            <option value=20>20</option>
+            <option value=50>50</option>
+            <option value=100>100</option>
+        </select>
+        <button class="filter-button" onclick="filter()">Filtrar</button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr id = "index">
+                <!-- Aqui se agregan los nombres de las columnas -->
+            </tr>
+        </thead>
+        <tbody id ="body">
+            <!-- Aqui se agregan las filas -->
+        </tbody>
+    </table>
+
+    <div class="pagination" id="paginator">
+        <!-- Botones de paginación -->
+    </div>
+    <script>
+        const getMetricTableUrl = "{{ url_for('metric.get_metric_table') }}";
+    </script>
+    <script src="{{ url_for('static', filename='scripts/metrics_script.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/common_script.js') }}"></script>
 </body>
 {% endblock %}

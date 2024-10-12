@@ -408,7 +408,6 @@ main {
 }
 
 .table-container {
-    max-height: 200px;
     overflow-y: auto;
     border: 1px solid #ccc;
 }
@@ -428,7 +427,7 @@ main {
 }
 
 .table tbody {
-    text-align: left;
+    text-align: center;
 }
 
 .table tbody tr {
@@ -469,7 +468,6 @@ main {
     margin-bottom: 5px;
     padding: 10px;
     border-radius: 5px;
-    width: 30%;
     text-align: left;
     background-color: #f4d1a0;
     cursor: pointer;

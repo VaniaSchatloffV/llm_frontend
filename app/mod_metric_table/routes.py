@@ -30,3 +30,15 @@ def send_metric():
     calification = data.get('calification')
     response = llm_api.send_metric(conversation_id, questions, calification)
     return jsonify({'success': True})
+
+
+@metric_bp.route('/get_metric_table/', methods=['POST'])
+@login_required
+@permissions_required(permissions_list=[5])
+def get_metric_table():
+    data = request.get_json()
+    limit = data.get("limit")
+    offset = data.get("offset")
+    order_by = data.get("order_by")
+    order_way = data.get("order_way")
+    return jsonify(llm_api.get_metric_table(limit, offset, order_by, order_way))

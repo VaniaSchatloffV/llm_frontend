@@ -17,7 +17,6 @@
         <select id="sort_way">
             <option value="desc">Descendente</option>
             <option value="asc">Ascendente</option>
-            <!-- Agrega más opciones si es necesario -->
         </select>
         <label for="limit">Datos por página</label>
         <select id="limit">
@@ -48,5 +47,6 @@
         const getConversationsTableUrl = "{{ url_for('conv.get_conversation_table') }}";
     </script>
     <script src="{{ url_for('static', filename='scripts/conversation_script.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/common_script.js') }}"></script>
 </body>
 {% endblock %}

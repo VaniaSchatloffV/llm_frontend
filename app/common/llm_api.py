@@ -118,3 +118,20 @@ def send_metric(conversation_id: int, questions: dict, calification: int):
         "calification" : calification
     }
     return api_conn.post(url = "/metrics/send/", body=body)
+
+def get_metric_table(limit = 10, offset = 0, order_by = "conversation_id", order_way = "desc"):
+    endpoint = "/metrics/getTable/"
+    body = {
+        "limit" : limit,
+        "offset" : offset,
+        "order_by" : order_by,
+        "order_way" : order_way
+    }
+    conversations_table = api_conn.get(url= endpoint, body=body)
+    if conversations_table:
+        data = conversations_table["data"]
+        for i in range(len(data)):
+            if data[i].get("Consulta generada") is not None:
+                data[i]["Consulta generada"] = data[i]["Consulta generada"].replace('\n', '<br>')
+        conversations_table["data"] = data
+    return conversations_table
