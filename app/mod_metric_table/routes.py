@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, request, jsonify
 from ..decorators.login_decorator import login_required
 from ..decorators.access_decorator import permissions_required
 from . import metric_bp
+from ..common import llm_api
+
 
 @metric_bp.get('/metrics/')
 @login_required
@@ -16,3 +18,15 @@ def main_metrics(*args, **kwargs):
     role = session.get('user_role')
     metrics_template = render_template('metrics.html', name=name, lastname=lastname, user_type=role, admin=admin, chat=chat, conversations=conversations, metrics=metrics)
     return metrics_template
+
+
+@metric_bp.route('/send/', methods=['POST'])
+@login_required
+@permissions_required(permissions_list=[1])
+def send_metric():
+    data = request.get_json()
+    questions = data.get('questions')
+    conversation_id = data.get('conversation_id')
+    calification = data.get('calification')
+    response = llm_api.send_metric(conversation_id, questions, calification)
+    return jsonify({'success': True})

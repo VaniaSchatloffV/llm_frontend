@@ -293,46 +293,79 @@ loadConversations();
 function startModalCreateRole(conversation_id) {
     const modal = document.getElementById('modal');
     modal.style.display = 'block';
-    const button = document.getElementById('metric-send');
+    
     let selectedStar = null;
+    
+    const button = document.getElementById('metric-send');
+    
     document.querySelectorAll('.star').forEach(star => {
-        star.addEventListener('click', function() {
-        selectedStar = this.value;
+        star.removeEventListener('click', handleStarClick);
+        star.addEventListener('click', handleStarClick);
     });
-});
-    button.addEventListener('click', function() {
-        console.log(selectedStar);
-        var respuesta1 = document.getElementById("1").value;
-        var respuesta2 = document.getElementById("2").value;
-        var respuesta3 = document.getElementById("3").value;
-        var respuesta4 = document.getElementById("4").value;
-        var respuesta5 = document.getElementById("5").value;
-        var respuesta6 = document.getElementById("6").value;
+    
+    function handleStarClick() {
+        selectedStar = this.value;
+    }
+    
+    button.removeEventListener('click', handleSendMetrics);
+    button.addEventListener('click', handleSendMetrics);
+    
+    function handleSendMetrics() {
+        const respuestas = {};
+        let preguntasCompletas = false;
+
+        document.querySelectorAll('.modal-input').forEach(input => {
+            const preguntaId = input.id;
+            const preguntaTexto = document.getElementById(`label${preguntaId}`).innerText;
+            const respuesta = input.value;
+            
+            if (respuesta) preguntasCompletas = true;
+            
+            respuestas[`${preguntaTexto}`] = respuesta ;
+        });
+
         if (!selectedStar) {
             alert("Por favor, califique la conversación.");
+        } else if (!preguntasCompletas) {
+            alert("Por favor, rellene al menos una respuesta.");
+        } else {
+            fetch(sendMetricUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'conversation_id': conversation_id,
+                    "questions": respuestas,
+                    "calification": selectedStar
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    modal.style.display = 'none';
+                    resetModalInputs();
+                } else {
+                    alert('Error al enviar los datos.');
+                }
+            });
         }
-        else if (!respuesta1 && !respuesta2 && !respuesta3 && !respuesta4 && !respuesta5) {
-            alert("Por favor rellene algún campo.");
-        }
-        else {
-            console.log("Enviando respuesta...");
-            console.log("Calificación = " + selectedStar + "/5");
-            console.log(respuesta1);
-            console.log(respuesta2);
-            console.log(respuesta3);
-            console.log(respuesta4);
-            console.log(respuesta5);
-            console.log(respuesta6);
-            modal.style.display = 'none';
-        }
-    });
+    }
+
     const modalCloseButton = document.getElementById("x");
-    modalCloseButton.addEventListener('click', () => {
+    modalCloseButton.removeEventListener('click', handleCloseModal);
+    modalCloseButton.addEventListener('click', handleCloseModal);
+    
+    function handleCloseModal() {
         modal.style.display = 'none';
+        resetModalInputs();
+    }
+
+    function resetModalInputs() {
         document.querySelectorAll('.modal-input').forEach(input => {
             input.value = "";
         });
-    });
-
+        selectedStar = null;
+    }
 }
 

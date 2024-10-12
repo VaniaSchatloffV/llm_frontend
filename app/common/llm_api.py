@@ -109,3 +109,11 @@ def check_file(file_id: int, file_type: str):
     }
     exists = api_conn.get(url = endpoint, body = body)
     return exists
+
+def send_metric(conversation_id: int, questions: dict, calification: int):
+    body = {
+        "conversation_id": conversation_id,
+        "questions" : questions,
+        "calification" : calification
+    }
+    return api_conn.post(url = "/metrics/send/", body=body)
