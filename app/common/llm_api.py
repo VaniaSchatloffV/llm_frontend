@@ -56,10 +56,7 @@ def set_conversation(conversation_id: int):
         return {'success': False}
 
 def download_file(file_id: int, file_type: str):
-    if file_type == "csv":
-        endpoint = "/files/download/csv/"
-    elif file_type == "xlsx":
-        endpoint = "/files/download/xlsx/"
+    endpoint = "/files/download/"
     
     body = {
         "file_id": file_id
@@ -101,19 +98,23 @@ def get_conversations_table(limit = 10, offset = 0, order_by = "conversation_id"
         conversations_table["data"] = data
     return conversations_table
 
-def check_file(file_id: int, file_type: str):
+def check_file(file_id: int):
     endpoint = "/files/check/"
     body = {
-        "file_id": file_id,
-        "file_type": file_type
+        "file_id": file_id
     }
     exists = api_conn.get(url = endpoint, body = body)
     return exists
 
 def send_metric(conversation_id: int, questions: dict, calification: int):
+    questions_new = {}
+    n = 1
+    for question in questions:
+        questions_new[f"Pregunta {n}"] = {"question": question, "answer": questions.get(question)}
+        n += 1
     body = {
         "conversation_id": conversation_id,
-        "questions" : questions,
+        "questions" : questions_new,
         "calification" : calification
     }
     return api_conn.post(url = "/metrics/send/", body=body)

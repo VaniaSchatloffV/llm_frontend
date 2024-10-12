@@ -70,6 +70,7 @@ async function updateChatMessages(messages) {
                 messageInput.disabled = true;
             }
         }
+        
         else if(msg.content.file_id){
             messageDiv.textContent = msg.content.text;
             var link = document.createElement('a');
@@ -81,8 +82,7 @@ async function updateChatMessages(messages) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    'file_id': msg.content.file_id,
-                    'file_type': msg.content.file_type
+                    'file_id': msg.content.file_id
                 })
             }).then(response => response.json()).then(data => {
                 if(data.result){
@@ -92,6 +92,7 @@ async function updateChatMessages(messages) {
                     });
                 }else{
                     link.classList.add('disabled');
+                    link.textContent = "Archivo no disponible";
                     link.title = "Archivo ya no está disponible";
                 }
             });
@@ -196,6 +197,7 @@ function updateConversations(conversations) {
             changeConversationName(conversation.id, button, link);
         });
         var button_calificar = document.createElement('a');
+        button_calificar.id = "calification-button";
         button_calificar.className = 'button sidebar-link';
         button_calificar.textContent = conversation.qualified? '★':'☆';
         button_calificar.title = "Calificar conversación";
@@ -345,6 +347,7 @@ function startModalCreateRole(conversation_id) {
                 if (data.success) {
                     modal.style.display = 'none';
                     resetModalInputs();
+                    document.getElementById("calification-button").innerText = '★';
                 } else {
                     alert('Error al enviar los datos.');
                 }

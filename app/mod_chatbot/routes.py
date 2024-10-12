@@ -89,6 +89,5 @@ def main_chat(*args, **kwargs):
 def check_file():
     data = request.get_json()
     file_id = data.get('file_id')
-    file_type = data.get('file_type')
-    exists = llm_api.check_file(file_id, file_type)
+    exists = llm_api.check_file(file_id)
     return {"result" : exists}
