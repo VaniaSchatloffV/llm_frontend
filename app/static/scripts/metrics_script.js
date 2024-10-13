@@ -23,35 +23,43 @@ function updateTable(data) {
         var row = document.createElement('tr');
         keys.forEach(key => {
             var value = element[key];
-            if (key == "Preguntas"){
+            var column = document.createElement('td');
+            if (key == "Preguntas") {
                 var boton_preguntas = document.createElement('button');
                 boton_preguntas.className = "orange-button";
                 boton_preguntas.innerText = "Ver respuestas";
                 boton_preguntas.addEventListener('click', function(){
-                    loadModalRespuestas(value);
+                    loadModal(value, "preguntas");
                 });
-                row.appendChild(boton_preguntas);
+                column.appendChild(boton_preguntas);
+            } else if (key == "Métricas") {
+                var boton_metricas = document.createElement('button');
+                boton_metricas.className = "orange-button";
+                boton_metricas.innerText = "Ver métricas";
+                boton_metricas.addEventListener('click', function(){
+                    loadModal(value, "metrics");
+                });
+                column.appendChild(boton_metricas);
             } else {
-                var column = document.createElement('td');
                 if(value != null){
                     value = value.toString();
                     if(value.includes("<br>")){
                         column.innerHTML = value;
                         column.style.textAlign = 'left';
-                    }else{
-                        column.textContent = value
+                    } else {
+                        column.textContent = value;
                         column.style.textAlign = 'center';
                     }
                 }
-                row.appendChild(column)
             }
-            
+            row.appendChild(column); // Asegúrate de agregar siempre la celda a la fila
         });
         table_body.appendChild(row);
     });
 }
 
-function loadModalRespuestas(values) {
+
+function loadModal(values, type = "preguntas") {
     const modal = document.getElementById('modal');
     const modalContainer = document.getElementById('container-small');
     
@@ -64,9 +72,16 @@ function loadModalRespuestas(values) {
         modal.style.display = 'none';
     });
 
-    const modalTitle = createElement("h2", "", `Preguntas y respuestas de métricas`);
-
-    const table = createQuestionTable(values);
+    let modalTitle;
+    let table;
+    if (type == "preguntas") {
+        modalTitle = createElement("h2", "", `Preguntas y respuestas del usuario`);
+        table = createQuestionTable(values);
+    } else {
+        modalTitle = createElement("h2", "", `Valores de métricas`);
+        table = createMetricTable(values);
+    }
+    
     
     modalContainer.append(modalCloseButton, modalTitle, document.createElement("br"), table);
 }
@@ -119,11 +134,48 @@ function createQuestionTable(values) {
 }
 
 
+function createMetricTable(values) {
+    const tableDiv = createElement("div", "table-container");
+    const table = createElement("table", "table");
+    table.id = "tablametricas";
+    
+    // Encabezado de la tabla
+    const header = createElement("thead");
+    const headerRow = createElement("tr");
+    const col1 = createElement("th", "", "Métrica");
+    const col2 = createElement("th", "", "Valor");
+    
+    headerRow.append(col1, col2, createElement("th")); // Columna vacía adicional
+    header.appendChild(headerRow);
+    table.appendChild(header);
+    
+    const tableBody = createElement("tbody");
+
+    // Iterar sobre las claves del diccionario
+    Object.keys(values).forEach(key => {
+        const metric = values[key]; // Obtener cada diccionario de pregunta y respuesta
+        const row = createElement("tr");
+        const pregunta = createElement("td", "", key);
+        pregunta.textAlign = "center";
+        const respuesta = createElement("td", "", metric);
+        respuesta.textAlign = "center";
+
+        row.append(pregunta, respuesta);
+        tableBody.appendChild(row); // Añadir la fila al cuerpo de la tabla
+    });
+    
+    table.appendChild(tableBody); // Añadir el cuerpo de la tabla fuera del bucle
+    tableDiv.appendChild(table);  // Añadir la tabla al contenedor
+
+    return tableDiv; // Retorna la tabla completa
+}
+
+
 
 function createTableHeader(){
     var table_index = document.getElementById('index');
     
-    keys = ["Id métrica", "Id conversación", "Id usuario", "Calificación (valor máximo 5)", "Preguntas"];
+    keys = ["Id métrica", "Id conversación", "Id usuario", "Calificación (valor máximo 5)", "Preguntas", "Métricas"];
     
     keys.forEach(key =>{
         var column = document.createElement('th');
