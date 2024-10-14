@@ -14,7 +14,7 @@ def initialize_data():
 class UserObject(Base):
     __tablename__ = 'users'
     __attributes__ = [
-            'id', 'name', 'name', 'lastname', 'email', 'password', 'role_id', 'created_at', 'deleted'
+            'id', 'name', 'lastname', 'email', 'password', 'role_id', 'created_at', 'deleted'
         ]
     
     id                          = sal.Column('id', sal.BigInteger, primary_key=True, autoincrement=True)
