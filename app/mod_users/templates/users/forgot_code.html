@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+    <title>Recuperar contraseña</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_style.css') }}">
+</head>
+<body>
+    {% include 'flash_messages.html' %}
+    {% block content %}{% endblock %}
+    <div class="login-container">
+        <img src="../static/images/logo.png" alt="Logo">
+        <form action="{{ url_for('auth.forgot_process_code') }}" method="post">
+            <h3 style="text-align: left;">Recuperar contraseña</h3><br>
+            <div class="form-group">
+                <label for="code">Ingrese código de recuperación:</label>
+                <input type="code" id="code" name="code" placeholder="" required>
+            </div>
+            <button type="submit" class="login-button">Enviar código</button>
+        </form>
+        <form action="{{ url_for('auth.index') }}" method="get">
+            <button type="submit" class="register-button">¿Quieres iniciar sesión? Haz clic aquí</button>
+        </form>
+    </div>
+</body>
+</html>

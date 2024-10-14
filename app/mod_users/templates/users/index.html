@@ -21,7 +21,7 @@
         <form action="{{ url_for('auth.register_view') }}" method="get">
             <button type="submit" class="register-button">¿No tienes cuenta? Haz clic aquí</button>
         </form>
-        <a href="#">Olvidé mi contraseña</a>
+        <a href="{{ url_for('auth.forgot') }}">Olvidé mi contraseña</a>
     </div>
 </body>
 </html>

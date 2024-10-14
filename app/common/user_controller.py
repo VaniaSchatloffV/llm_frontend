@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from typing import Optional
 from flask import Blueprint, jsonify, url_for, request, render_template, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -6,8 +7,11 @@ from .. import get_settings
 from ..mod_users.models.users import UserObject
 from ..mod_users.models.roles import RoleObject
 from ..mod_users.models.permissions import PermissionObject
+from ..mod_users.models.password_reset import PasswordResetObject
 from ..mod_users.models.role_permission_assoc import RolePermissionAssocObject
+from ..common import mail_helper
 import json
+import secrets
 
 settings = get_settings()
 
@@ -235,3 +239,84 @@ def delete_role(role_id: int):
     except Exception as e:
         flash("Ha ocurrido un error al eliminar rol", "error")
         return jsonify({"result":False})
+
+def generate_code():
+    return secrets.SystemRandom().randint(100000, 999999)
+
+def forgot():
+    email = request.form.get('email')
+    user = get_user(email)
+    if user:
+        code = generate_code()
+        with DB_ORM_Handler() as db:
+            old_code = db.getObjects(
+                PasswordResetObject,
+                PasswordResetObject.user_id == user.get("id"),
+                PasswordResetObject.reset == False,
+                PasswordResetObject.expires_at > datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%SZ")
+            )
+            if old_code:
+                flash("Ya se envió un código. Por favor, ingréselo.", "danger")
+                return redirect(url_for('auth.forgot_code'))
+            password_reset = PasswordResetObject()
+            password_reset.code = code
+            password_reset.email = email
+            password_reset.user_id = user.get("id")
+            password_reset.old_password = user.get("password")
+            db.saveObject(password_reset)
+        mail_helper.send_recuperation_email(email, user.get("name"), user.get("lastname"), code)
+        session["email_verification"] = email
+        flash("Se ha enviado un correo electrónico", "success")
+        return redirect(url_for('auth.forgot_code'))
+    else:
+        flash("No existe usuario", "error")
+
+def reset_password():
+    code = request.form.get('code')
+    email = session.get("email_verification")
+    with DB_ORM_Handler() as db:
+        verification = db.getObjects(
+            PasswordResetObject,
+            PasswordResetObject.email == email,
+            PasswordResetObject.code == code,
+            PasswordResetObject.expires_at > datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%SZ"),
+            PasswordResetObject.reset == False
+        )
+    if verification:
+        flash("Código correcto", "success")
+        session["reset_id"] = verification.pop().id
+        return redirect(url_for('auth.reset_password'))
+    else:
+        flash("Código incorrecto o expirado", "danger")
+        return redirect(url_for('auth.forgot_code'))
+
+def reset_password_process():
+    password = request.form.get('password')
+    password_review = request.form.get('password_review')
+    
+    if password != password_review:
+        flash('Las contraseñas no coinciden', 'danger')
+        return redirect(url_for('auth.reset_password'))
+    
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+    email = session.get("email_verification")
+    reset_id = session.get("reset_id")
+    if not email or not reset_id:
+        flash("Falló recuperación de contraseña. Inténtelo de nuevo", "error")
+        return redirect(url_for('auth.forgot'))
+    with DB_ORM_Handler() as db:
+        rs = db.updateObjects(
+            UserObject,
+            UserObject.email == email,
+            password = hashed_password
+        )
+        if rs == 0:
+            flash("Falló recuperación de contraseña. Inténtelo de nuevo", "error")
+            return redirect(url_for('auth.forgot'))
+        rs = db.updateObjects(
+            PasswordResetObject,
+            PasswordResetObject.id == reset_id,
+            reset = True
+        )
+    flash("Contraseña actualizada correctamente", "success")
+    return redirect(url_for('auth.index'))
