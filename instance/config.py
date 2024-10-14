@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     api_identifier : str
     auth0_client_id : str
     auth0_client_secret : str
+    email_sender : str
+    file_expiration_time_delta : float
     
     class Config:
         env_file = ".env"

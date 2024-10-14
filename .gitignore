@@ -9,3 +9,5 @@ static/.ipynb_checkpoints/
 templates/.ipynb_checkpoints/
 venv
 env
+credentials.json
+token.pickle
