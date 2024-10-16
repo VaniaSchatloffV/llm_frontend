@@ -12,7 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 from instance.config import get_settings
 settings = get_settings()
 
-# El alcance de acceso (en este caso, Gmail API)
+# El alcance de acceso
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 def authenticate_gmail():
@@ -44,26 +44,15 @@ def send_email(destination_mail: str, subject: str, body_html: str):
     creds = authenticate_gmail()
 
     try:
-        # Cliente de la API de Gmail
         service = build('gmail', 'v1', credentials=creds)
-
-        # Crear el mensaje de correo
         message = EmailMessage()
-        
-        # Establecer el cuerpo del correo en HTML
         message.add_alternative(body_html, subtype='html')
-
-        # Encabezados del correo
         message['To'] = destination_mail
         message['From'] = settings.email_sender
         message['Subject'] = subject
 
-        # Codificar el mensaje en base64
         raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
-
-        # Enviar el correo
         send_message = service.users().messages().send(userId="me", body={'raw': raw_message}).execute()
-
         print(f'Correo enviado, ID del mensaje: {send_message["id"]}')
 
     except HttpError as error:

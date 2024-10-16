@@ -44,17 +44,9 @@ function createPermissionItem(perm) {
     item_detail.appendChild(text);
 
     // Crear el contenedor de acciones
-    const actions = createElement('div', 'item-actions');
-    const button_1_span = createElement('span', 'role', 'A');
-    const button_2_span = createElement('span', 'icon-role', '⇅');
     
-    actions.appendChild(button_1_span);
-    actions.appendChild(button_2_span);
-
     // Añadir detalles y acciones al elemento principal 'li'
     item.appendChild(item_detail);
-    item.appendChild(actions);
-
     return item;
 }
 
