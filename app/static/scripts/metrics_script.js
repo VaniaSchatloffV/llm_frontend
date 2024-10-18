@@ -82,8 +82,19 @@ function loadModal(values, type = "preguntas") {
         table = createMetricTable(values);
     }
     
-    
-    modalContainer.append(modalCloseButton, modalTitle, document.createElement("br"), table);
+    const search_input = createFormInput("metric_search", "Buscar permiso...", false);
+    search_input.placeholder = "Buscar métrica...";
+    search_input.addEventListener('keyup', searchMetric);
+    modalContainer.append(modalCloseButton, modalTitle, document.createElement("br"), search_input, table);
+}
+
+function createFormInput(input_id, placeholder, required = true) {
+    const form_item_input = createElement("input", "modal-input");
+    form_item_input.placeholder = placeholder;
+    form_item_input.type = "text";
+    form_item_input.id = input_id;
+    form_item_input.required = required;
+    return form_item_input;
 }
 
 function createElement(tag, className = "", innerHTML = "") {
@@ -133,8 +144,24 @@ function createQuestionTable(values) {
     return tableDiv; // Retorna la tabla completa
 }
 
+function searchMetric() {
+    const input = document.getElementById("metric_search");
+    const filter = input.value.toUpperCase();
+    const table = document.getElementById("tablametricas");
+    const tr = table.getElementsByTagName("tr");
+
+    // Recorrer filas y ocultar las que no coincidan con el filtro
+    for (let i = 1; i < tr.length; i++) { // Iniciar en 1 para evitar el encabezado
+        const td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            const txtValue = td.textContent || td.innerText;
+            tr[i].style.display = (txtValue.toUpperCase().indexOf(filter) > -1) ? "" : "none";
+        }
+    }
+}
 
 function createMetricTable(values) {
+    
     const tableDiv = createElement("div", "table-container");
     const table = createElement("table", "table");
     table.id = "tablametricas";
@@ -154,10 +181,11 @@ function createMetricTable(values) {
     // Iterar sobre las claves del diccionario
     Object.keys(values).forEach(key => {
         const metric = values[key]; // Obtener cada diccionario de pregunta y respuesta
+        console.log(key + " " + values[key]);
         const row = createElement("tr");
         const pregunta = createElement("td", "", key);
         pregunta.textAlign = "center";
-        const respuesta = createElement("td", "", metric);
+        const respuesta = createElement("td", "", metric +"");
         respuesta.textAlign = "center";
 
         row.append(pregunta, respuesta);

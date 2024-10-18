@@ -354,7 +354,7 @@ main {
     color: #ec971f;
 }
 
-.modal-input[type="text"]{
+.modal-input{
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
