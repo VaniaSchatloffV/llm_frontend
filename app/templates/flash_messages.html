@@ -1,7 +1,6 @@
 <div id="flash-message" class="flash-message"></div>
 
 <script>
-    // Función para obtener los flash messages desde el servidor
     function fetchFlashMessages() {
         fetch("{{ url_for('get_flash_messages') }}")
             .then(response => response.json())
@@ -13,10 +12,10 @@
                     const message = lastMessage[1];
 
                     flashMessage.innerHTML = message;
-                    flashMessage.className = 'flash-message';  // Limpia las clases anteriores
+                    flashMessage.className = 'flash-message';
                     flashMessage.classList.add(category, 'show');
 
-                    // Ocultar después de 5 segundos
+                    
                     setTimeout(() => {
                         flashMessage.classList.remove('show');
                     }, 5000);
@@ -24,6 +23,5 @@
             });
     }
 
-    // Llama a la función cada cierto intervalo para actualizar los mensajes flash
-    setInterval(fetchFlashMessages, 1000); // Cada 5 segundos
+    setInterval(fetchFlashMessages, 1000);
 </script>

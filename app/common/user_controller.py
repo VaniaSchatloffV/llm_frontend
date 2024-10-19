@@ -18,7 +18,7 @@ settings = get_settings()
 def login():
     email = request.form.get('email')
     password = request.form.get('password')
-    user = get_user(email)
+    user = get_user(user_email=email)
     if user != {} and check_password_hash(user.get("password"), password):
         role = get_role(user.get("role_id"))
         session['user_id'] = user.get("id")
@@ -51,14 +51,32 @@ def register():
     
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     try:
-        existing_user = get_user(email)
+        existing_user = get_user(user_email=email)
         if existing_user != {}:
             flash('El correo electrónico ya está registrado', 'danger')
             return redirect(url_for('auth.index'))
-        result = insert_new_user(email, name, lastname, hashed_password)
+        admin_users = get_admin_users()
+        role_id = 2
+        if admin_users == {}:
+            role_id = 1
+        result = insert_new_user(email, name, lastname, hashed_password, role_id)
         if not result:
             raise Exception("No se ha podido guardar el usuario.")
         flash('Registro exitoso. Por favor, inicia sesión', 'success')
+        for admin in admin_users:
+            print(admin)
+            mail_helper.send_default_email(
+                admin.get("email"),
+                f"NexQuery: Se necesita acción - {name} {lastname}",
+                "<p>Se ha creado un nuevo usuario en su plataforma. Por favor, ingrese para poder darle permisos.<p/>",
+                "NexQuery: Nuevo registro de usuario"
+            )
+        mail_helper.send_default_email(
+                email,
+                f"¡Bienvenido(a) a NexQuery {name} {lastname}!",
+                "<p>Pronto podrás acceder a las funcionalidades que otorga nuestra plataforma, sólo tienes que esperar a que un administrador te otorgue un rol. ¡Serás notificado(a) cuando esto suceda!<p/>",
+                "¡Bienvenido(a) a NexQuery!"
+            )
         return redirect(url_for('auth.index'))
     except Exception as e:
         flash('Ocurrió un error durante el registro. Por favor, intenta de nuevo', 'danger')
@@ -69,7 +87,24 @@ def logout():
     flash('Sesión cerrada.', 'success')
     return redirect(url_for('auth.index'))
 
-def get_user(user_email: str):
+def get_admin_users():
+    """
+    Retorna lista de diccionarios con
+        - id
+        - email
+    Almacenados en la base de datos. Si el usuario no existe, retorna lista vacía.
+    """
+    with DB_ORM_Handler() as db:
+        users = db.getObjects(
+            UserObject,
+            UserObject.role_id == 1,
+            columns=[UserObject.id, UserObject.email]
+        )
+        if len(users) == 0:
+            return {}
+        return users
+
+def get_user(user_email: Optional[str] = None, id: Optional[int] = None):
     """
     Retorna diccionario con
         - id
@@ -77,14 +112,24 @@ def get_user(user_email: str):
         - lastname
         - password
         - role_id
+        - email
     Almacenados en la base de datos. Si el usuario no existe, retorna diccionario vacío.
     """
     with DB_ORM_Handler() as db:
+        if id is not None:
+            user = db.getObjects(
+                UserObject,
+                UserObject.id == id,
+                columns=[UserObject.id, UserObject.name, UserObject.lastname, UserObject.role_id, UserObject.password, UserObject.email]
+            )
+            if user:
+                return user.pop()
+            return {}
         user = db.getObjects(
             UserObject,
             UserObject.email == user_email,
             defer_cols=[],
-            columns=[UserObject.id, UserObject.name, UserObject.lastname, UserObject.role_id, UserObject.password]
+            columns=[UserObject.id, UserObject.name, UserObject.lastname, UserObject.role_id, UserObject.password, UserObject.email]
         )
         if len(user) == 0:
             return {}
@@ -102,13 +147,13 @@ def get_role(role_id: int):
             return None
         return role.pop().get("role_name")
 
-def insert_new_user(email: str, name: str, lastname: str, password: str):
+def insert_new_user(email: str, name: str, lastname: str, password: str, role_id : int = 2):
     User = UserObject()
     User.email = email
     User.name = name
     User.lastname = lastname
     User.password = password
-    User.role_id = 2
+    User.role_id = role_id
     with DB_ORM_Handler() as db:
         db.createTable(User)
         return db.saveObject(User)
@@ -174,9 +219,21 @@ def add_role_to_user(user_id: int, role_id: int):
                 UserObject.id == user_id,
                 role_id=role_id
             )
-            flash("Rol cambiado con éxito", "success")
+            if updated_rows != 0:
+                user = get_user(id = user_id)
+                role = get_role(user.get("role_id"))
+                flash("Rol cambiado con éxito", "success")
+                mail_helper.send_default_email(
+                    user.get("email"),
+                    "Se ha actualizado su rol",
+                    f"<p>¡Hola, {user.get('name')} {user.get('lastname')}!</p><br><p>Se te ha asignado el rol de {role}<p/>",
+                    "NexQuery: Actualización en su rol"
+                )
+            else:
+                flash("No se ha podido cambiar el rol", "error")
             return jsonify({"result":True})
     except Exception as e:
+        print(e)
         flash("Ha ocurrido un error al actualizar rol", "error")
         return jsonify({"result":False})
 
@@ -245,7 +302,7 @@ def generate_code():
 
 def forgot():
     email = request.form.get('email')
-    user = get_user(email)
+    user = get_user(user_email=email)
     if user:
         code = generate_code()
         with DB_ORM_Handler() as db:

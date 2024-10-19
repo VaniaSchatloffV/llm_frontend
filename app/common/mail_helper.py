@@ -82,3 +82,12 @@ def send_recuperation_email(destination_mail, name, lastname, code):
     }
     html_body = template.render(data)
     send_email(destination_mail, "NexQuery: Recuperar contraseña", html_body)
+
+def send_default_email(destination_mail, title, description, subject):
+    template = get_template('basic_mail_template.html')
+    data = {
+        "title": title,
+        "description": description
+    }
+    html_body = template.render(data)
+    send_email(destination_mail, subject, html_body)
