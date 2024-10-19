@@ -100,7 +100,9 @@ async function updateChatMessages(messages) {
                 if(data.result){
                     link.title = "";
                     link.addEventListener('click', function() {
-                        downloadFile(msg.content.file_id, msg.content.file_type);
+                        link.innerHTML = 'Archivo se está descargando...';
+                        link.classList.add('disabled');
+                        downloadFile(msg.content.file_id, msg.content.file_type, link);
                     });
                 }else{
                     link.classList.add('disabled');
@@ -268,7 +270,7 @@ function changeConversationName(conversation_id, button, link) {
     });
 }
 
-function downloadFile(file_id, file_type){
+function downloadFile(file_id, file_type, link){
     fetch(downloadFileUrl, {
         method: 'POST',
         headers: {
@@ -293,8 +295,12 @@ function downloadFile(file_id, file_type){
         a.click();
         window.URL.revokeObjectURL(url); // Liberar memoria
         document.body.removeChild(a);
+        link.classList.remove('disabled');
+        link.innerHTML = 'Descargar';
     }).catch(error => {
         console.error('Error al descargar el archivo:', error);
+        link.classList.remove('disabled');
+        link.innerHTML = 'Descargar';
     });
 }
 
