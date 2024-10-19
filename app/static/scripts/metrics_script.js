@@ -95,8 +95,8 @@ function loadModal(values, type = "preguntas") {
         table = createMetricTable(values);
     }
     
-    const search_input = createFormInput("metric_search", "Buscar permiso...", false);
-    search_input.placeholder = "Buscar métrica...";
+    const search_input = createFormInput("metric_search", "", false);
+    search_input.placeholder = "Buscar...";
     search_input.addEventListener('keyup', searchMetric);
     modalContainer.append(modalCloseButton, modalTitle, document.createElement("br"), search_input, table);
 }
