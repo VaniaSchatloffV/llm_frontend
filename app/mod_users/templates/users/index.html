@@ -7,13 +7,17 @@
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_style.css') }}">
 </head>
 <body>
     {% include 'flash_messages.html' %}
     {% block content %}{% endblock %}
     <div class="login-container">
         <img src="static/images/logo.png" alt="Logo">
-        <form action="{{ url_for('auth.login') }}" method="post">
+        <div id="loading-spinner" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+        <form id="loginForm" action="{{ url_for('auth.login') }}" method="post">
             <input type="email" name="email" placeholder="email@ejemplo.com" required>
             <input type="password" name="password" placeholder="**********" required>
             <button type="submit" class="login-button">Iniciar sesión</button>
@@ -23,5 +27,18 @@
         </form>
         <a href="{{ url_for('auth.forgot') }}">Olvidé mi contraseña</a>
     </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const spinner = document.getElementById('loading-spinner');
+
+        form.addEventListener('submit', function(event) {
+            if (form.checkValidity()) {
+                spinner.style.display = 'block';
+            } else {
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>
