@@ -1,3 +1,12 @@
+const loadingSpinner = document.getElementById('loading-spinner');
+
+function showSpinner(){
+    loadingSpinner.style.display = "block";
+}
+
+function hideSpinner(){
+    loadingSpinner.style.display = "none";
+}
 
 function adminPermissions(){
     close_sidebar();
@@ -5,6 +14,7 @@ function adminPermissions(){
 }
 
 function loadPermissions() {
+    showSpinner();
     const permissions_list = document.getElementById('list-permissions');
     permissions_list.innerHTML = '';
 
@@ -15,9 +25,11 @@ function loadPermissions() {
                 const item = createPermissionItem(perm);
                 permissions_list.appendChild(item);
             });
+            hideSpinner();
         })
         .catch(error => {
             console.error('Error loading permissions:', error);
+            hideSpinner();
         });
 }
 

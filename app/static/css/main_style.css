@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f1f1f1;
+    align-items: center;
 }
 
 header {
@@ -321,7 +322,7 @@ main {
     height: 100%;
     overflow: auto;
     background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4)
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -330,7 +331,7 @@ main {
     position: relative;
     padding: 0;
     outline: 0;
-    width: 600px
+    width: 600px;
 }
 
 .modal-button {
@@ -418,6 +419,8 @@ main {
     width: 100%;
     display: table;
     border: 1px solid #ccc;
+    align-items: center;
+    
 }
 
 .table thead {

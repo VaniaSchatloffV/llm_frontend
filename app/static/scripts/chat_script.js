@@ -1,6 +1,18 @@
 const loadingSpinnerChat = document.getElementById('loading-spinner-conversation');
 const loadingSpinnerSidebar = document.getElementById('loading-spinner-sidebar');
 
+function showButtonSpinner(){
+    let button = document.getElementById('metric-send');
+    button.innerHTML = '<div class="spinner"></div>';
+    button.disabled = true;
+}
+
+function hideButtonSpinner(){
+    let button = document.getElementById('metric-send');
+    button.innerHTML = "Enviar";
+    button.disabled = false;
+}
+
 async function sendMessage(message){
     await loadOneMessage(message);
     var submitButton = document.getElementById('submit-chat-button');
@@ -313,6 +325,7 @@ function startModalCreateRole(conversation_id) {
     button.addEventListener('click', handleSendMetrics);
     
     function handleSendMetrics() {
+        showButtonSpinner();
         const respuestas = {};
         let preguntasCompletas = false;
 
@@ -328,8 +341,10 @@ function startModalCreateRole(conversation_id) {
 
         if (!selectedStar) {
             alert("Por favor, califique la conversación.");
+            hideButtonSpinner();
         } else if (!preguntasCompletas) {
             alert("Por favor, rellene al menos una respuesta.");
+            hideButtonSpinner();
         } else {
             fetch(sendMetricUrl, {
                 method: 'POST',
@@ -347,10 +362,12 @@ function startModalCreateRole(conversation_id) {
                 if (data.success) {
                     modal.style.display = 'none';
                     resetModalInputs();
+                    hideButtonSpinner();
                     document.getElementById("calification-button").innerText = '★';
                 } else {
                     alert('Error al enviar los datos.');
                 }
+                
             });
         }
     }

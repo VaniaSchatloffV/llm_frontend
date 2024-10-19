@@ -1,4 +1,15 @@
+const loadingSpinner = document.getElementById('loading-spinner');
+
+function showSpinner(){
+    loadingSpinner.style.display = "block";
+}
+
+function hideSpinner(){
+    loadingSpinner.style.display = "none";
+}
+
 function getConversationTable(offset, limitValue, order_by, order_way) {
+    showSpinner();
     fetch(getConversationsTableUrl, {
         method: 'POST',
         headers: {
@@ -13,6 +24,7 @@ function getConversationTable(offset, limitValue, order_by, order_way) {
     }).then(response => response.json()).then(data => {
         updateConversationsTable(data.data);
         updatePaginator(data.total, offset, limitValue, order_by, order_way);
+        hideSpinner();
     });
 }
 

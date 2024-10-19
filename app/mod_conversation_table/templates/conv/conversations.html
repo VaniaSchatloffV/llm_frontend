@@ -7,41 +7,45 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_style.css') }}">
 </head>
 <body>
-
-    <div>
-        <label for="sort">Ordenar por</label>
-        <select id="sort">
-            <option value="conversation_id">Id conversación</option>
-            <option value="user_id">Id usuario</option>
-        </select>
-        <select id="sort_way">
-            <option value="desc">Descendente</option>
-            <option value="asc">Ascendente</option>
-        </select>
-        <label for="limit">Datos por página</label>
-        <select id="limit">
-            <option value=5>5</option>
-            <option value=10 selected>10</option>
-            <option value=20>20</option>
-            <option value=50>50</option>
-            <option value=100>100</option>
-        </select>
-        <button class="filter-button" onclick="filter()">Filtrar</button>
-    </div>
-
-    <table class="table">
-        <thead>
-            <tr id = "index">
-                <!-- Aqui se agregan los nombres de las columnas -->
-            </tr>
-        </thead>
-        <tbody id ="body">
-            <!-- Aqui se agregan las filas -->
-        </tbody>
-    </table>
-
-    <div class="pagination" id="paginator">
-        <!-- Botones de paginación -->
+    <div class="container">
+        <div>
+            <label for="sort">Ordenar por</label>
+            <select id="sort">
+                <option value="conversation_id">Id conversación</option>
+                <option value="user_id">Id usuario</option>
+            </select>
+            <select id="sort_way">
+                <option value="desc">Descendente</option>
+                <option value="asc">Ascendente</option>
+            </select>
+            <label for="limit">Datos por página</label>
+            <select id="limit">
+                <option value=5>5</option>
+                <option value=10 selected>10</option>
+                <option value=20>20</option>
+                <option value=50>50</option>
+                <option value=100>100</option>
+            </select>
+            <button class="filter-button" onclick="filter()">Filtrar</button>
+        </div>
+        <div class="table-container" style="height: 80%;">
+            <table class="table">
+                <thead>
+                    <tr id = "index">
+                        <!-- Aqui se agregan los nombres de las columnas -->
+                    </tr>
+                </thead>
+                <tbody id ="body">
+                    <!-- Aqui se agregan las filas -->
+                </tbody>
+            </table>
+        </div>
+        <div id="loading-spinner" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+        <div class="pagination" id="paginator">
+            <!-- Botones de paginación -->
+        </div>
     </div>
     <script>
         const getConversationsTableUrl = "{{ url_for('conv.get_conversation_table') }}";

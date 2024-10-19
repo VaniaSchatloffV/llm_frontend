@@ -1,11 +1,20 @@
-// Función principal para manejar roles de administrador
-function adminRole() {
+const loadingSpinner = document.getElementById('loading-spinner');
+
+function showSpinner(){
+    loadingSpinner.style.display = "block";
+}
+
+function hideSpinner(){
+    loadingSpinner.style.display = "none";
+}
+
+async function adminRole() {
     close_sidebar();
     loadRoles();
 }
 
-// Cargar y mostrar los roles
 function loadRoles() {
+    showSpinner();
     const roles_list = document.getElementById('list-roles');
     roles_list.innerHTML = ''; // Limpiar la lista de roles
 
@@ -17,6 +26,8 @@ function loadRoles() {
                 const item = createRoleItem(role);
                 roles_list.appendChild(item);
             });
+            hideSpinner();
+
         });
 
     // Crear botón de "Crear rol"

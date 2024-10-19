@@ -10,7 +10,7 @@
     <div class="sidebar bar-block card animate-left" style="display:none" id="mySidebar">
         <button class="button large" onclick="close_sidebar()">Cerrar</button>
         <div id="conversations">
-            <div id="loading-spinner-sidebar" class="loading-spinner" style="display: block;"></div>
+            <div id="loading-spinner-sidebar" class="loading-spinner" style="display: block;">
                 <div class="spinner"></div>
             </div>
             <!-- Aquí se mostrarán las conversaciones -->
@@ -21,10 +21,12 @@
         <div id="modal" class="modal" style="display: none;">
             <div class="modal-content">
                 <div class="container-small" id="container-small">
+                    
                     <span id="x" class="modal-button">x</span>
                     <div class="welcome-column">
                         <h2>Calificar conversación</h2>
                     </div>
+                    
                     <div class="star-wrap">
                         <input class="star" checked type="radio" value="-1" id="skip-star" name="star-radio" autocomplete="off" />
                         <label class="star-label hidden"></label>
@@ -49,7 +51,6 @@
                             <div class="star-shape"></div>
                         </label>
                     </div>
-
                     <br>
                     <label for="1" id="label1">1. ¿El chatbot respondió adecuadamente a tus preguntas?</label><br>
                     <select id="1" class="modal-input" required>
@@ -57,8 +58,6 @@
                         <option value="Si" >Si</option>
                         <option value="No" >No</option>
                     </select>
-                    
-                    
                     <br>
                     <label for="2" id="label2">2. ¿Cómo calificarías la velocidad de las respuestas del chatbot?</label><br>
                     <select id="2" class="modal-input" required>
@@ -69,8 +68,6 @@
                         <option value="Lento" >Lento</option>
                         <option value="Muy lento" >Muy lento</option>
                     </select>
-                
-                
                     <br>
                     <label for="3" id="label3">3. ¿Consideras que el chatbot debería ser más conciso en sus respuestas?</label><br>
                     <select id="3" class="modal-input" required>
@@ -78,22 +75,17 @@
                         <option value="Si" >Si</option>
                         <option value="No" >No</option>
                     </select>
-                
-                
                     <br>
                     <label for="4" id="label4">4. ¿Hubo algún tema con el que el chatbot tuvo dificultades para proporcionar información? Si es así, ¿cuál fue?</label><br>
                     <input id="4" class="modal-input" type="text" required>
-                
-                
                     <br>
                     <label for="5" id="label5">5. ¿Qué funcionalidad adicional te gustaría agregar para mejorar las conversaciones con el chatbot?</label><br>
                     <input id="5" class="modal-input" type="text" required>
-
                     <br>
                     <label for="6" id="label6">6. Comentarios adicionales.</label><br>
                     <input id="6" class="modal-input" type="text" required><br>
 
-                    <button id="metric-send" class="orange-button" type="submit">Enviar</button>
+                    <button id="metric-send" class="orange-button" type="submit">Enviar</div></button>
                     
                 </div>
             </div>

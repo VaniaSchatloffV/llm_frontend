@@ -1,4 +1,16 @@
+const loadingSpinner = document.getElementById('loading-spinner');
+
+function showSpinner(){
+    loadingSpinner.style.display = "block";
+}
+
+function hideSpinner(){
+    loadingSpinner.style.display = "none";
+}
+
+
 function getMetricTable(offset, limitValue, order_by, order_way) {
+    showSpinner();
     fetch(getMetricTableUrl, {
         method: 'POST',
         headers: {
@@ -13,6 +25,7 @@ function getMetricTable(offset, limitValue, order_by, order_way) {
     }).then(response => response.json()).then(data => {
         updateTable(data.data);
         updatePaginator(data.total, offset, limitValue, order_by, order_way, getMetricTable);
+        hideSpinner();
     });
 }
 

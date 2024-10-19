@@ -1,3 +1,12 @@
+const loadingSpinner = document.getElementById('loading-spinner');
+
+function showSpinner(){
+    loadingSpinner.style.display = "block";
+}
+
+function hideSpinner(){
+    loadingSpinner.style.display = "none";
+}
 
 function addRoleToUser(role_id, user_id){
     fetch(addRoleUrl, {
@@ -151,6 +160,7 @@ function createUserItem(user) {
 }
 
 function loadUsers() {
+    showSpinner();
     const users_list = document.getElementById('list');
     users_list.innerHTML = '';
 
@@ -160,10 +170,12 @@ function loadUsers() {
             data.forEach(user => {
                 const item = createUserItem(user);
                 users_list.appendChild(item);
+                hideSpinner();
             });
         })
         .catch(error => {
             console.error('Error loading users:', error);
+            hideSpinner();
         });
 }
 
