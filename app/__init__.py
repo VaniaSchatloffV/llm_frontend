@@ -3,7 +3,7 @@ from instance.config import get_settings
 import os
 
 from datetime import timedelta
-from flask import Flask, Blueprint, jsonify, url_for, request, render_template, redirect, flash, session
+from flask import Flask, jsonify, session, get_flashed_messages
 from markupsafe import escape
 
 from .mod_administration import admin_bp
@@ -38,5 +38,11 @@ def create_app():
     app.register_blueprint(conv_bp, url_prefix='/conv/')
     app.register_blueprint(metric_bp, url_prefix='/met/')
     app.register_blueprint(auth_bp, url_prefix="/")
+
+    @app.route('/get_flash_messages')
+    def get_flash_messages():
+        messages = get_flashed_messages(with_categories=True)
+        return jsonify(messages)
+
 
     return app
