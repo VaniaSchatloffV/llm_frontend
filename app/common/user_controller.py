@@ -270,6 +270,8 @@ def forgot():
         return redirect(url_for('auth.forgot_code'))
     else:
         flash("No existe usuario", "error")
+        return redirect(url_for('auth.forgot'))
+
 
 def reset_password():
     code = request.form.get('code')
