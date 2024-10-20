@@ -89,7 +89,6 @@
                     
                 </div>
             </div>
-        </div>
 
         <div class="teal">
             <button id="openNav" class="button xlarge" onclick="open_sidebar();loadConversations()">&#9776;</button>
@@ -111,6 +110,7 @@
             </div>
         </div>
     </div>
+
     <script>
         const sendMessageUrl = "{{ url_for('chatbot.send_message') }}";
         const getMessagesUrl = "{{ url_for('chatbot.get_messages') }}";
