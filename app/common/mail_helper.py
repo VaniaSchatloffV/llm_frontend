@@ -7,6 +7,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from google.auth.exceptions import RefreshError
 from jinja2 import Environment, FileSystemLoader
 
 from instance.config import get_settings
@@ -27,15 +28,22 @@ def authenticate_gmail():
     # Si no hay credenciales disponibles o están expiradas, pide al usuario autenticarse.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+            try:
+                creds.refresh(Request())
+            except RefreshError as e:
+                print(f"Error al refrescar el token: {e}")
+                if os.path.exists('token.pickle'):
+                    os.remove('token.pickle')
+                # Forzar autenticación completa
+                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+                with open('token.pickle', 'wb') as token:
+                    pickle.dump(creds, token)
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
-
-        # Guardar las credenciales para la próxima ejecución
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
 
     return creds
 

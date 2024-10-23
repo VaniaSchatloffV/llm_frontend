@@ -87,17 +87,18 @@ function loadModal(values, type = "preguntas") {
 
     let modalTitle;
     let table;
+    let search_input = document.createElement("div");
     if (type == "preguntas") {
         modalTitle = createElement("h2", "", `Preguntas y respuestas del usuario`);
         table = createQuestionTable(values);
     } else {
         modalTitle = createElement("h2", "", `Valores de métricas`);
         table = createMetricTable(values);
+        search_input = createFormInput("metric_search", "", false);
+        search_input.placeholder = "Buscar...";
+        search_input.addEventListener('keyup', searchMetric);
     }
     
-    const search_input = createFormInput("metric_search", "", false);
-    search_input.placeholder = "Buscar...";
-    search_input.addEventListener('keyup', searchMetric);
     modalContainer.append(modalCloseButton, modalTitle, document.createElement("br"), search_input, table);
 }
 
